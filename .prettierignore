@@ -1,0 +1,6 @@
+packages/**/*.d.ts
+packages/**/*.js
+.nyc_output
+dist/**/*.js
+dist/**/*.d.ts
+dist/**/*.js.map

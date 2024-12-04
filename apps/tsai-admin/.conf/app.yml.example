@@ -1,0 +1,6 @@
+app:
+  name: tsai-admin
+  upload:
+    data: /tsai-platform/data
+  server:
+    port: 8964

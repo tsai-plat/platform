@@ -1,0 +1,11 @@
+# Stop the editor from looking for .editorconfig files in the parent directories
+# root = true
+
+[*]
+# Non-configurable Prettier behaviors
+charset = utf-8
+insert_final_newline = true
+
+[*.{ts,js,json,mjs,cjs}]
+indent_style = space
+indent_size = 2

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@tsailab/schematics",
+  "sourceRoot": "apps/tsai-admin/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/tsai-admin/tsconfig.build.json"
+  },
+  "monorepo": true,
+  "root": "apps/tsai-admin",
+  "defaultLibraryPrefix": "@tsai-platform",
+  "projects": {
+    "tsai-admin": {
+      "type": "application",
+      "root": "apps/tsai-admin",
+      "entryFile": "main",
+      "sourceRoot": "apps/tsai-admin/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/tsai-admin/tsconfig.build.json"
+      }
+    },
+    "common": {
+      "type": "library",
+      "root": "packages/common",
+      "entryFile": "index",
+      "sourceRoot": "packages/common/src",
+      "compilerOptions": {
+        "tsConfigPath": "packages/common/tsconfig.pkg.json"
+      }
+    },
+    "core": {
+      "type": "library",
+      "root": "packages/core",
+      "entryFile": "index",
+      "sourceRoot": "packages/core/src",
+      "compilerOptions": {
+        "tsConfigPath": "packages/core/tsconfig.pkg.json"
+      }
+    },
+    "ucenter": {
+      "type": "library",
+      "root": "packages/ucenter",
+      "entryFile": "index",
+      "sourceRoot": "packages/ucenter/src",
+      "compilerOptions": {
+        "tsConfigPath": "packages/ucenter/tsconfig.lib.json"
+      }
+    }
+  }
+}
