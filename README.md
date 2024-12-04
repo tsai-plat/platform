@@ -84,10 +84,6 @@ With Mau, you can deploy your application in just a few clicks, allowing you to 
 
 Tsai is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. 
 
-## Stay in touch
-
-- Author - [cmetav](https://twitter.com/lamborghini171)
-- Twitter - [@tsailab](https://twitter.com/lotolab)
 
 ## License
 
