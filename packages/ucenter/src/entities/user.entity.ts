@@ -1,4 +1,5 @@
 import {
+  AccountType,
   CommonEntity,
   PlatformEnum,
   UserStatusEnum,
@@ -14,6 +15,8 @@ import { IUser } from '@tsai-platform/common/types';
   comment: '用户主表',
 })
 export class UserEntity extends CommonEntity implements IUser {
+  acctype: AccountType = 'custom';
+
   /**
    * 自动生成唯一
    */

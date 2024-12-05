@@ -1,4 +1,5 @@
 import {
+  AccountType,
   CommonEntity,
   PlatformEnum,
   UserStatusEnum,
@@ -14,6 +15,7 @@ import { IUser } from '@tsai-platform/common/types';
   comment: '系统用户主表',
 })
 export class SystemUserEntity extends CommonEntity implements IUser {
+  readonly acctype: AccountType = 'system';
   /**
    * 自动生成唯一
    */

@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "admin":"pnpm -F tsai-admin dev",
+    "admin": "pnpm -F tsai-admin dev",
     "build": "nest build",
     "clean": "npx rimraf ./dist/packages",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",

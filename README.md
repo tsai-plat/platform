@@ -50,6 +50,9 @@ $ pnpm run start:dev
 
 # production mode
 $ pnpm run start:prod
+
+# pnpm workspace packages command
+pnpm -F libname add dependency -D --save-peer
 ```
 
 ## Run tests

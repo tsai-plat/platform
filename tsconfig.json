@@ -35,6 +35,12 @@
       ],
       "@tsai-platform/ucenter/*": [
         "packages/ucenter/dist/*"
+      ],
+      "@tsai-platform/ok": [
+        "libs/ok/src"
+      ],
+      "@tsai-platform/ok/*": [
+        "libs/ok/src/*"
       ]
     }
   }

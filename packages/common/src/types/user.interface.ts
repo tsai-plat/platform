@@ -1,10 +1,11 @@
-import { PlatformEnum, UserStatusEnum } from '../enums';
+import { AccountType, PlatformEnum, UserStatusEnum } from '../enums';
 
 export interface IUserBase {
   id: number;
   userno: string; //unique in global
   username: string;
   phone: string;
+  acctype: AccountType;
   status: UserStatusEnum;
   platform: PlatformEnum;
 }
