@@ -19,6 +19,15 @@ export class CommonEntity extends BaseEntity {
   id: number;
 
   @Column({
+    type: 'varchar',
+    nullable: true,
+    default: 'NA',
+    name: 'orgno',
+    comment: 'orgno',
+  })
+  orgno: string;
+
+  @Column({
     type: 'int',
     nullable: true,
     default: 0,

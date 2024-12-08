@@ -1,5 +1,10 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { LotoHeadersType } from '@tsai-platform/common';
+import {
+  IUserSession,
+  LotoHeaderEnum,
+  LotoHeadersType,
+  UuidGenerator,
+} from '@tsai-platform/common';
 import * as requestIP from 'request-ip';
 
 export const LotoHeaders = createParamDecorator(
@@ -8,10 +13,20 @@ export const LotoHeaders = createParamDecorator(
 
     const { user } = request;
 
-    let info: LotoHeadersType | undefined;
+    let reqid: string = request.headers[LotoHeaderEnum.X_Loto_Reqid] ?? '';
+    if (!reqid?.length) {
+      reqid = await UuidGenerator.genReqid(32);
+    }
 
-    const headerInfo: LotoHeadersType = {
-      ip: requestIP.getClientIp(request),
+    const info: LotoHeadersType = {
+      ip: requestIP.getClientIp(request) ?? '',
+      uid: user?.id,
+      username: user?.username ?? '',
+      reqid,
+      cliid: request.headers[LotoHeaderEnum.X_Loto_Key],
+      session: user ? (user as unknown as IUserSession) : undefined,
+      LotoHeaderKeyType: '',
+      orgno: user?.orgno ?? '',
     };
 
     return info && props ? info[props as string] : info;

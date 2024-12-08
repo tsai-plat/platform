@@ -1,3 +1,4 @@
+export * from './caches';
 export * from './crypto';
 export * from './enums';
 export * from './exceptions';

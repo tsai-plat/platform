@@ -17,3 +17,10 @@ export type LotoHeadersType = {
   session?: IUserSession;
   [k: string]: any;
 };
+
+export type LotoModuleRouteType = {
+  name: string;
+  modulePath: string;
+  desc?: string;
+  [k: string]: string;
+};

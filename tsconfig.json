@@ -41,6 +41,12 @@
       ],
       "@tsai-platform/ok/*": [
         "libs/ok/src/*"
+      ],
+      "@tsailab/cache": [
+        "libs/cache/src"
+      ],
+      "@tsailab/cache/*": [
+        "libs/cache/src/*"
       ]
     }
   }

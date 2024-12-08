@@ -24,8 +24,22 @@ export type MysqlDBConfigSchema = {
   autoLoadEntities?: boolean;
 };
 
+// cache.redis
+export type CacheRedisConfigSchema = {
+  host: string;
+  port: number;
+  db: string;
+  password?: string | undefined;
+  username?: string | undefined;
+  ttl?: number;
+};
+
 export type GlobalConfigSchema = {
   app: AppConfigSchema;
   mysql: MysqlDBConfigSchema;
+  cache: {
+    redis: CacheRedisConfigSchema;
+    [c: string]: any;
+  };
   [k: string]: any;
 };

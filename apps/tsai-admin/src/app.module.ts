@@ -1,14 +1,18 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-// import { AdminModule } from './system/admin/admin.module';
-// import { AppGlobalModule } from './app-global/app-global.module';
 import { ConfigModule } from '@nestjs/config';
-import { isProdRuntime, MysqlConfigFactory, YamlConfigLoader } from '@tsai-platform/core';
+import {
+  ApiTransformInterceptor,
+  isProdRuntime,
+  MysqlConfigFactory,
+  YamlConfigLoader,
+} from '@tsai-platform/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UcenterModule } from '@tsai-platform/ucenter';
-import { AdminModule } from './system/admin/admin.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { CommModule } from './common/comm.module';
 
 @Module({
   imports: [
@@ -22,13 +26,20 @@ import { AdminModule } from './system/admin/admin.module';
       },
     }),
     TypeOrmModule.forRootAsync({
-      useClass:MysqlConfigFactory
+      useClass: MysqlConfigFactory,
     }),
-    UcenterModule.forRoot({isGlobal:true}),
-    AdminModule,
-    // AppGlobalModule,
+    UcenterModule.forRoot({ isGlobal: true }),
+    CommModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ApiTransformInterceptor,
+    },
+  ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(_consumer: MiddlewareConsumer) {}
+}

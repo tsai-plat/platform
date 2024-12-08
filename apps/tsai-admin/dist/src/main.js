@@ -9,6 +9,7 @@ const swagger_1 = require("@nestjs/swagger");
 const package_json_1 = require("../package.json");
 const common_2 = require("@nestjs/common");
 const chalk = require("chalk");
+const core_2 = require("@tsai-platform/core");
 async function bootstrap() {
     const listeners = [];
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
@@ -37,16 +38,21 @@ async function bootstrap() {
         exclude: [
             {
                 path: 'health',
-                method: common_2.RequestMethod.GET
-            }
-        ]
+                method: common_2.RequestMethod.GET,
+            },
+        ],
     });
+    app.useGlobalPipes(new common_2.ValidationPipe({
+        transform: true,
+        exceptionFactory: core_2.validationExceptionFactory,
+    }));
+    app.useGlobalFilters(new core_2.HttpExceptionFilter());
     await app.listen(appPort, '0.0.0.0');
     const serveUrl = await app.getUrl();
     if ((0, common_1.convertYes)(swaggerEnabled)) {
         listeners.push({
             name: `${docTitle} API`,
-            url: `${serveUrl}/docs-${apiPrefix}`
+            url: `${serveUrl}/docs-${apiPrefix}`,
         });
     }
     listeners.push({
@@ -55,7 +61,8 @@ async function bootstrap() {
     });
     return listeners.reverse();
 }
-bootstrap().then((listeners) => {
+bootstrap()
+    .then((listeners) => {
     const logger = console.log;
     logger(chalk.magentaBright('🌸🌸🌸🚀🚀🚀🌸🌸🌸'));
     logger(chalk.magentaBright(`乐通系统启动完成...\n`));
@@ -63,7 +70,8 @@ bootstrap().then((listeners) => {
         logger(chalk.cyan(`${name}: `, url));
     });
     logger(chalk.magentaBright('🌸🌸🌸🚀🚀🚀🌸🌸🌸'));
-}).catch((error) => {
+})
+    .catch((error) => {
     console.error(error);
 });
 //# sourceMappingURL=main.js.map
