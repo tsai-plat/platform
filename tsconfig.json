@@ -47,6 +47,12 @@
       ],
       "@tsailab/cache-redis/*": [
         "packages/cache-redis/dist/*"
+      ],
+      "@tsailab/system": [
+        "packages/system/dist"
+      ],
+      "@tsailab/system/*": [
+        "packages/system/dist/*"
       ]
     }
   }

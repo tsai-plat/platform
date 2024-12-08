@@ -211,15 +211,15 @@ importers:
       '@tsai-platform/ucenter':
         specifier: workspace:*
         version: link:../../packages/ucenter
-      '@tsailab/cache':
-        specifier: workspace:*
-        version: link:../../packages/cache
       '@tsailab/common':
         specifier: workspace:*
         version: link:../../packages/common
       '@tsailab/node-redis':
         specifier: workspace:*
         version: link:../../packages/node-redis
+      '@tsailab/system':
+        specifier: workspace:*
+        version: link:../../packages/system
       helmet:
         specifier: 8.0.0
         version: 8.0.0
@@ -400,6 +400,15 @@ importers:
       '@ingestkorea/util-jsonwebtoken':
         specifier: 1.1.1
         version: 1.1.1
+      '@nestjs/swagger':
+        specifier: 8.1.0
+        version: 8.1.0(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.13)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
+      class-validator:
+        specifier: 0.14.1
+        version: 0.14.1
       date-fns:
         specifier: 4.1.0
         version: 4.1.0
@@ -484,6 +493,40 @@ importers:
       tslib:
         specifier: 2.8.1
         version: 2.8.1
+      typescript:
+        specifier: ^5.1.3
+        version: 5.7.2
+
+  packages/system:
+    dependencies:
+      '@nestjs/typeorm':
+        specifier: ^10.0.2
+        version: 10.0.2(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.13)(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.1)(typeorm@0.3.20(ioredis@5.4.1)(mysql2@3.11.5)(redis@4.7.0)(ts-node@10.9.2(@types/node@22.10.1)(typescript@5.7.2)))
+    devDependencies:
+      '@nestjs/common':
+        specifier: ^10.0.0
+        version: 10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/swagger':
+        specifier: 8.1.0
+        version: 8.1.0(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.13)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)
+      '@nestjs/testing':
+        specifier: ^10.0.0
+        version: 10.4.13(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.13)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.13(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13))
+      '@tsailab/common':
+        specifier: workspace:*
+        version: link:../common
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
+      class-validator:
+        specifier: 0.14.1
+        version: 0.14.1
+      tslib:
+        specifier: 2.8.1
+        version: 2.8.1
+      typeorm:
+        specifier: ^0.3.20
+        version: 0.3.20(ioredis@5.4.1)(mysql2@3.11.5)(redis@4.7.0)(ts-node@10.9.2(@types/node@22.10.1)(typescript@5.7.2))
       typescript:
         specifier: ^5.1.3
         version: 5.7.2

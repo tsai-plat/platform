@@ -64,6 +64,15 @@
       "compilerOptions": {
         "tsConfigPath": "packages/cache-redis/tsconfig.pkg.json"
       }
+    },
+    "system": {
+      "type": "library",
+      "root": "packages/system",
+      "entryFile": "index",
+      "sourceRoot": "packages/system/src",
+      "compilerOptions": {
+        "tsConfigPath": "packages/system/tsconfig.pkg.json"
+      }
     }
   }
 }

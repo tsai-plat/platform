@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SigninController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
-const app_constents_1 = require("../../enums/app.constents");
+const api_routes_1 = require("../../api/api.routes");
 let SigninController = class SigninController {
     constructor() { }
     login(dto) {
@@ -31,7 +31,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], SigninController.prototype, "login", null);
 exports.SigninController = SigninController = __decorate([
-    (0, swagger_1.ApiTags)(`${app_constents_1.TsaiAdminModuleRoutes.authRoute.name} API`),
+    (0, swagger_1.ApiTags)(`${api_routes_1.TsaiAdminModuleRoutes.authRoute.name} API`),
     (0, common_1.Controller)('system'),
     __metadata("design:paramtypes", [])
 ], SigninController);

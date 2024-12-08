@@ -1,0 +1,58 @@
+{
+    "name": "@tsailab/system",
+    "version": "0.1.0",
+    "description": "Tsailab library system",
+    "author": "tsailab",
+    "license": "LICENSE",
+    "keywords": [
+        "tsai-platform",
+        "system"
+    ],
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist",
+        "LICENSE",
+        "README.md"
+    ],
+    "scripts": {
+        "build": "pnpm clean && pnpm build:pkg",
+        "build:pkg": "tsc --build --verbose --force tsconfig.pkg.json",
+        "clean": "rm -rf dist/*",
+        "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+        "lint": "eslint \"{src,apps,libs,packages,test}/**/*.ts\" --fix",
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "test:cov": "jest --coverage",
+        "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+        "test:e2e": "jest --config ./test/jest-e2e.json"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "devDependencies": {
+        "@nestjs/common": "^10.0.0",
+        "@nestjs/swagger": "8.1.0",
+        "@nestjs/testing": "^10.0.0",
+        "@tsailab/common": "workspace:*",
+        "class-transformer": "^0.5.1",
+        "class-validator": "0.14.1",
+        "tslib": "2.8.1",
+        "typeorm": "^0.3.20",
+        "typescript": "^5.1.3"
+    },
+    "peerDependencies": {
+        "@nestjs/common": "^9.4.3 || ^10.0.0",
+        "@nestjs/swagger": "8.1.0",
+        "@nestjs/testing": "^9.4.3 || ^10.0.0",
+        "class-transformer": "^0.5.1",
+        "class-validator": "0.14.1",
+        "tslib": "2.8.1",
+        "typeorm": "^0.3.20",
+        "typescript": "^4.1.6 || ^5.1.3"
+    },
+    "peerDependenciesMeta": {},
+    "dependencies": {
+        "@nestjs/typeorm": "^10.0.2"
+    }
+}

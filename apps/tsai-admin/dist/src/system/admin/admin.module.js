@@ -6,18 +6,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AdminModule = void 0;
+exports.SysAdminModule = void 0;
 const common_1 = require("@nestjs/common");
-const custom_user_controller_1 = require("./controllers/custom-user.controller");
 const custom_user_service_1 = require("./services/custom-user.service");
-let AdminModule = class AdminModule {
+const custom_user_controller_1 = require("./controllers/custom-user.controller");
+let SysAdminModule = class SysAdminModule {
 };
-exports.AdminModule = AdminModule;
-exports.AdminModule = AdminModule = __decorate([
+exports.SysAdminModule = SysAdminModule;
+exports.SysAdminModule = SysAdminModule = __decorate([
     (0, common_1.Module)({
         imports: [],
         controllers: [custom_user_controller_1.CustomUserController],
         providers: [custom_user_service_1.CustomUserService],
     })
-], AdminModule);
+], SysAdminModule);
 //# sourceMappingURL=admin.module.js.map

@@ -85,7 +85,8 @@
       "^@tsai-platform/core(|/.*)$": "<rootDir>/packages/core/dist/$1",
       "^@tsai-platform/ucenter(|/.*)$": "<rootDir>/packages/ucenter/src/$1",
       "^@tsailab/cache-redis(|/.*)$": "<rootDir>/packages/cache-redis/dist/$1",
-      "^@tsailab/node-redis(|/.*)$": "<rootDir>/packages/node-redis/dist/$1"
+      "^@tsailab/node-redis(|/.*)$": "<rootDir>/packages/node-redis/dist/$1",
+      "^@tsailab/system(|/.*)$": "<rootDir>/packages/system/dist/$1"
     }
   }
 }

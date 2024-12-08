@@ -15,8 +15,10 @@ const core_1 = require("@tsai-platform/core");
 const typeorm_1 = require("@nestjs/typeorm");
 const ucenter_1 = require("@tsai-platform/ucenter");
 const core_2 = require("@nestjs/core");
-const comm_module_1 = require("./common/comm.module");
 const node_redis_1 = require("@tsailab/node-redis");
+const system_1 = require("@tsailab/system");
+const comm_module_1 = require("./common/comm.module");
+const api_module_1 = require("./api/api.module");
 let AppModule = class AppModule {
     configure(_consumer) { }
 };
@@ -45,14 +47,10 @@ exports.AppModule = AppModule = __decorate([
             typeorm_1.TypeOrmModule.forRootAsync({
                 useClass: core_1.MysqlConfigFactory,
             }),
+            system_1.SystemModule.forRoot(),
             ucenter_1.UcenterModule.forRoot({ isGlobal: true }),
-            core_2.RouterModule.register([
-                {
-                    path: 'comm',
-                    module: comm_module_1.CommModule,
-                },
-            ]),
             comm_module_1.CommModule,
+            api_module_1.ApiModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [
