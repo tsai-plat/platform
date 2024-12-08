@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
-const common_1 = require("@tsai-platform/common/");
+const common_1 = require("@tsailab/common/");
 const config_1 = require("@nestjs/config");
 const helmet_1 = require("helmet");
 const swagger_1 = require("@nestjs/swagger");

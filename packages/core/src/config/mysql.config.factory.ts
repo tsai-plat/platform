@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
-import { MysqlDBConfigSchema } from '@tsai-platform/common/types';
+import { MysqlDBConfigSchema } from '@tsailab/common/types';
 
 @Injectable()
 export class MysqlConfigFactory implements TypeOrmOptionsFactory {

@@ -10,6 +10,17 @@ export class RandomHelper {
     return `${prefix}_${first}${second}`;
   }
 
+  static genRandomCacheKey() {
+    const prex1 = (Math.random() * Math.pow(36, 1)) | 0;
+    const prex2 = (Math.random() * Math.pow(36, 1)) | 0;
+    const prefix = prex1.toString(36).toUpperCase() + prex2.toString(36);
+    const firstPart = (Math.random() * Math.pow(36, 6)) | 0;
+    const secondPart = (Math.random() * Math.pow(36, 6)) | 0;
+    const first = ('00000' + firstPart.toString(36)).slice(-6);
+    const second = ('00000' + secondPart.toString(36)).slice(-6);
+    return `${prefix}_${first}${second}`;
+  }
+
   /**
    *
    * {2:valid}+{4:type}+{8:seqno}

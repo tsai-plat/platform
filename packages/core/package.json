@@ -32,7 +32,7 @@
     "devDependencies": {
         "@nestjs/common": "^10.0.0",
         "@nestjs/config": "3.3.0",
-        "@tsai-platform/common": "workspace:*",
+        "@tsailab/common": "workspace:*",
         "@types/request-ip": "0.0.41",
         "chalk": "4.1.2",
         "common": "0.2.5",

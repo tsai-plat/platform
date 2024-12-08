@@ -8,12 +8,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommModule = void 0;
 const common_1 = require("@nestjs/common");
+const wechat_oauth_controller_1 = require("./auth/wechat-oauth.controller");
+const captcha_controller_1 = require("./captcha/captcha.controller");
+const captcha_service_1 = require("./captcha/captcha.service");
 let CommModule = class CommModule {
 };
 exports.CommModule = CommModule;
 exports.CommModule = CommModule = __decorate([
     (0, common_1.Module)({
         imports: [],
+        controllers: [wechat_oauth_controller_1.WechatOauthController, captcha_controller_1.CaptchaController],
+        providers: [captcha_service_1.CaptchaService],
+        exports: [],
     })
 ], CommModule);
 //# sourceMappingURL=comm.module.js.map

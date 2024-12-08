@@ -16,6 +16,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const ucenter_1 = require("@tsai-platform/ucenter");
 const core_2 = require("@nestjs/core");
 const comm_module_1 = require("./common/comm.module");
+const node_redis_1 = require("@tsailab/node-redis");
 let AppModule = class AppModule {
     configure(_consumer) { }
 };
@@ -32,10 +33,25 @@ exports.AppModule = AppModule = __decorate([
                     abortEarly: true,
                 },
             }),
+            node_redis_1.NodeRedisModule.forRoot({
+                config: {
+                    host: '172.20.0.1',
+                    port: 6379,
+                    db: 8,
+                    ttl: 5,
+                    password: 'admin123',
+                },
+            }),
             typeorm_1.TypeOrmModule.forRootAsync({
                 useClass: core_1.MysqlConfigFactory,
             }),
             ucenter_1.UcenterModule.forRoot({ isGlobal: true }),
+            core_2.RouterModule.register([
+                {
+                    path: 'comm',
+                    module: comm_module_1.CommModule,
+                },
+            ]),
             comm_module_1.CommModule,
         ],
         controllers: [app_controller_1.AppController],

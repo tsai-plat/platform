@@ -9,7 +9,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
-import { BizException, ValidationException } from '@tsai-platform/common';
+import { BizException, ValidationException } from '@tsailab/common';
 import * as requestIP from 'request-ip';
 
 const getStatusCode = <T>(exception: T): number => {

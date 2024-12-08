@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { convertYes, LotoAppListener } from '@tsai-platform/common/';
+import { convertYes, LotoAppListener } from '@tsailab/common/';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';

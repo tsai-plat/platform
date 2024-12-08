@@ -4,7 +4,7 @@ import {
   LotoHeaderEnum,
   LotoHeadersType,
   UuidGenerator,
-} from '@tsai-platform/common';
+} from '@tsailab/common';
 import * as requestIP from 'request-ip';
 
 export const LotoHeaders = createParamDecorator(

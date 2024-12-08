@@ -80,9 +80,12 @@
       "<rootDir>/packages/"
     ],
     "moduleNameMapper": {
-      "^@tsai-platform/common(|/.*)$": "<rootDir>/packages/common/dist/$1",
+      "^@tsailab/common(|/.*)$": "<rootDir>/packages/common/dist/$1",
+      "^@tsailab/cache(|/.*)$": "<rootDir>/packages/cache/dist/$1",
       "^@tsai-platform/core(|/.*)$": "<rootDir>/packages/core/dist/$1",
-      "^@tsai-platform/ucenter(|/.*)$": "<rootDir>/packages/ucenter/src/$1"
+      "^@tsai-platform/ucenter(|/.*)$": "<rootDir>/packages/ucenter/src/$1",
+      "^@tsailab/cache-redis(|/.*)$": "<rootDir>/packages/cache-redis/dist/$1",
+      "^@tsailab/node-redis(|/.*)$": "<rootDir>/packages/node-redis/dist/$1"
     }
   }
 }

@@ -3,11 +3,11 @@ import {
   CommonEntity,
   PlatformEnum,
   UserStatusEnum,
-} from '@tsai-platform/common';
+} from '@tsailab/common';
 
 import { Column, Entity, Index } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { IUser } from '@tsai-platform/common/types';
+import { IUser } from '@tsailab/common/types';
 
 @Entity({
   name: 'loto_user',

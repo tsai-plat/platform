@@ -13,7 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppService = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
-const common_2 = require("@tsai-platform/common");
+const common_2 = require("@tsailab/common");
 let AppService = AppService_1 = class AppService {
     constructor(config) {
         this.config = config;

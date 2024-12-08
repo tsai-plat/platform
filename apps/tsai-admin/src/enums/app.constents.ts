@@ -1,4 +1,4 @@
-import { LotoModuleRouteType } from '@tsai-platform/common';
+import { LotoModuleRouteType } from '@tsailab/common';
 
 export const TsaiAdminModuleRoutes: { [k: string]: LotoModuleRouteType } = {
   commRoute: {

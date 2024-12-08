@@ -26,9 +26,10 @@ export type MysqlDBConfigSchema = {
 
 // cache.redis
 export type CacheRedisConfigSchema = {
-  host: string;
-  port: number;
-  db: string;
+  url?: string;
+  host?: string;
+  port?: number;
+  db: number;
   password?: string | undefined;
   username?: string | undefined;
   ttl?: number;

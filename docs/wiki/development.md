@@ -25,5 +25,5 @@ pnpm --filter pkg* run test
 pnpm -F core build 
 
 # add workspace lib to other lib
-pnpm -F ucenter add  @tsai-platform/common -D --save-peer
+pnpm -F ucenter add  @tsailab/common -D --save-peer
 ```

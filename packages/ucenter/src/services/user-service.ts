@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../entities';
 import { Repository } from 'typeorm';
-import { BizException, ErrorCodeEnum } from '@tsai-platform/common';
+import { BizException, ErrorCodeEnum } from '@tsailab/common';
 
 @Injectable()
 export class UserService {

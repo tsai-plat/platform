@@ -10,20 +10,12 @@ exports.AdminModule = void 0;
 const common_1 = require("@nestjs/common");
 const custom_user_controller_1 = require("./controllers/custom-user.controller");
 const custom_user_service_1 = require("./services/custom-user.service");
-const core_1 = require("@nestjs/core");
 let AdminModule = class AdminModule {
 };
 exports.AdminModule = AdminModule;
 exports.AdminModule = AdminModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            core_1.RouterModule.register([
-                {
-                    path: 'sys',
-                    module: AdminModule,
-                },
-            ]),
-        ],
+        imports: [],
         controllers: [custom_user_controller_1.CustomUserController],
         providers: [custom_user_service_1.CustomUserService],
     })

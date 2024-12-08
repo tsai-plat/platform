@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Observable, map } from 'rxjs';
 import { IgnoreTransformPropertyName } from '../decorators';
-import { APIHttpStatus, APIResponse } from '@tsai-platform/common';
+import { APIHttpStatus, APIResponse } from '@tsailab/common';
 
 @Injectable()
 export class ApiTransformInterceptor implements NestInterceptor {

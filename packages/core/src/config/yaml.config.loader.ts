@@ -2,7 +2,7 @@ import { existsSync, readdirSync, statSync, readFileSync } from 'fs';
 import { resolve, join } from 'path';
 import * as yaml from 'js-yaml';
 import * as chalk from 'chalk';
-import { StageEnvType } from '@tsai-platform/common/types';
+import { StageEnvType } from '@tsailab/common/types';
 
 export const APP_CONFIG_FILE = 'app.yml';
 

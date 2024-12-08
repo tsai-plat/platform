@@ -18,11 +18,17 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@tsai-platform/common": [
+      "@tsailab/common": [
         "packages/common/dist"
       ],
-      "@tsai-platform/common/*": [
+      "@tsailab/common/*": [
         "packages/common/dist/*"
+      ],
+      "@tsailab/node-redis": [
+        "packages/node-redis/dist"
+      ],
+      "@tsailab/node-redis/*": [
+        "packages/node-redis/dist/*"
       ],
       "@tsai-platform/core": [
         "packages/core/dist"
@@ -36,17 +42,11 @@
       "@tsai-platform/ucenter/*": [
         "packages/ucenter/dist/*"
       ],
-      "@tsai-platform/ok": [
-        "libs/ok/src"
+      "@tsailab/cache-redis": [
+        "packages/cache-redis/dist"
       ],
-      "@tsai-platform/ok/*": [
-        "libs/ok/src/*"
-      ],
-      "@tsailab/cache": [
-        "libs/cache/src"
-      ],
-      "@tsailab/cache/*": [
-        "libs/cache/src/*"
+      "@tsailab/cache-redis/*": [
+        "packages/cache-redis/dist/*"
       ]
     }
   }
