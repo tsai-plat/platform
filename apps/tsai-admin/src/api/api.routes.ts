@@ -1,6 +1,11 @@
 import { LotoModuleRouteType } from '@tsailab/common';
 
 export const TsaiAdminModuleRoutes: { [k: string]: LotoModuleRouteType } = {
+  chatRoute: {
+    name: 'Chatbot',
+    modulePath: 'chat',
+    desc: '对话机器人模块',
+  },
   commRoute: {
     name: 'Common',
     modulePath: 'comm',

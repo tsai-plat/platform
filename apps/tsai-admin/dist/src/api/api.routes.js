@@ -2,6 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TsaiAdminModuleRoutes = void 0;
 exports.TsaiAdminModuleRoutes = {
+    chatRoute: {
+        name: 'Chatbot',
+        modulePath: 'chat',
+        desc: '对话机器人模块',
+    },
     commRoute: {
         name: 'Common',
         modulePath: 'comm',

@@ -14,8 +14,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CaptchaController = void 0;
 const common_1 = require("@nestjs/common");
-const captcha_service_1 = require("./captcha.service");
 const swagger_1 = require("@nestjs/swagger");
+const core_1 = require("@tsai-platform/core");
 const common_2 = require("@tsailab/common");
 let CaptchaController = class CaptchaController {
     constructor(captchaService) {
@@ -46,6 +46,6 @@ __decorate([
 ], CaptchaController.prototype, "get", null);
 exports.CaptchaController = CaptchaController = __decorate([
     (0, common_1.Controller)('captcha'),
-    __metadata("design:paramtypes", [captcha_service_1.CaptchaService])
+    __metadata("design:paramtypes", [core_1.CaptchaService])
 ], CaptchaController);
 //# sourceMappingURL=captcha.controller.js.map

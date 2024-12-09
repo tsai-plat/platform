@@ -1,1 +1,1 @@
-export * from './system.user.entity';
+export default {};

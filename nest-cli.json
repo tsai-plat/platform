@@ -73,6 +73,15 @@
       "compilerOptions": {
         "tsConfigPath": "packages/system/tsconfig.pkg.json"
       }
+    },
+    "api-v1": {
+      "type": "application",
+      "root": "apps/api-v1",
+      "entryFile": "main",
+      "sourceRoot": "apps/api-v1/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api-v1/tsconfig.app.json"
+      }
     }
   }
 }

@@ -6,7 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "admin": "pnpm -F tsai-admin dev",
+    "dev": "pnpm -F tsai-admin dev",
+    "admin":"pnpm -F tsai-admin tsadmin",
     "build": "nest build",
     "clean": "npx rimraf ./dist/packages",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
@@ -83,7 +84,7 @@
       "^@tsailab/common(|/.*)$": "<rootDir>/packages/common/dist/$1",
       "^@tsailab/cache(|/.*)$": "<rootDir>/packages/cache/dist/$1",
       "^@tsai-platform/core(|/.*)$": "<rootDir>/packages/core/dist/$1",
-      "^@tsai-platform/ucenter(|/.*)$": "<rootDir>/packages/ucenter/src/$1",
+      "^@tsai-platform/ucenter(|/.*)$": "<rootDir>/packages/ucenter/dist/$1",
       "^@tsailab/cache-redis(|/.*)$": "<rootDir>/packages/cache-redis/dist/$1",
       "^@tsailab/node-redis(|/.*)$": "<rootDir>/packages/node-redis/dist/$1",
       "^@tsailab/system(|/.*)$": "<rootDir>/packages/system/dist/$1"

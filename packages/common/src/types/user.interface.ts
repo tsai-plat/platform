@@ -28,3 +28,8 @@ export interface IUserProfile {
   unionid?: string;
   sex?: number;
 }
+
+export interface UsernoInfo {
+  uno: string;
+  value: string;
+}

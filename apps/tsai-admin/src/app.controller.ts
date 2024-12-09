@@ -11,7 +11,7 @@ export class AppController {
     summary: 'health beat',
   })
   @Get('health')
-  getHealth(): string {
-    return this.service.health();
+  async getHealth(): Promise<string> {
+    return await this.service.health();
   }
 }

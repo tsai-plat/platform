@@ -1,6 +1,6 @@
 import { Controller, Get, HttpStatus, Query, Res } from '@nestjs/common';
-import { CaptchaService } from './captcha.service';
 import { ApiOperation } from '@nestjs/swagger';
+import { CaptchaService } from '@tsai-platform/core';
 import { HttpContentTypeEnum, RandomHelper } from '@tsailab/common';
 import { Response } from 'express';
 

@@ -17,8 +17,8 @@ let AppController = class AppController {
     constructor(service) {
         this.service = service;
     }
-    getHealth() {
-        return this.service.health();
+    async getHealth() {
+        return await this.service.health();
     }
 };
 exports.AppController = AppController;
@@ -29,7 +29,7 @@ __decorate([
     (0, common_1.Get)('health'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", String)
+    __metadata("design:returntype", Promise)
 ], AppController.prototype, "getHealth", null);
 exports.AppController = AppController = __decorate([
     (0, swagger_1.ApiTags)(`Application endpoint wiki`),

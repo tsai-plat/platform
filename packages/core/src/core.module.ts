@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { CaptchaService } from './core/services/captcha/captcha.service';
 
 @Module({
-  providers: [],
-  exports: [],
+  providers: [CaptchaService],
+  exports: [CaptchaService],
 })
 export class CoreModule {}

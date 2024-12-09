@@ -10,12 +10,14 @@ exports.CommModule = void 0;
 const common_1 = require("@nestjs/common");
 const wechat_oauth_controller_1 = require("./auth/wechat-oauth.controller");
 const captcha_controller_1 = require("./captcha/captcha.controller");
-const captcha_service_1 = require("./captcha/captcha.service");
 const core_1 = require("@nestjs/core");
+const services_1 = require("./services");
+const core_2 = require("@tsai-platform/core");
 let CommModule = class CommModule {
 };
 exports.CommModule = CommModule;
 exports.CommModule = CommModule = __decorate([
+    (0, common_1.Global)(),
     (0, common_1.Module)({
         imports: [
             core_1.RouterModule.register([
@@ -26,7 +28,7 @@ exports.CommModule = CommModule = __decorate([
             ]),
         ],
         controllers: [wechat_oauth_controller_1.WechatOauthController, captcha_controller_1.CaptchaController],
-        providers: [captcha_service_1.CaptchaService],
+        providers: [services_1.AdminManager, core_2.CaptchaService],
         exports: [],
     })
 ], CommModule);

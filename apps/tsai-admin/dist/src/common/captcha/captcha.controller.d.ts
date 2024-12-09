@@ -1,4 +1,4 @@
-import { CaptchaService } from './captcha.service';
+import { CaptchaService } from '@tsai-platform/core';
 import { Response } from 'express';
 export declare class CaptchaController {
     private readonly captchaService;

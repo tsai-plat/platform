@@ -1,9 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { WechatOauthController } from './auth/wechat-oauth.controller';
 import { CaptchaController } from './captcha/captcha.controller';
-import { CaptchaService } from './captcha/captcha.service';
 import { RouterModule } from '@nestjs/core';
+import { AdminManager } from './services';
+import { CaptchaService } from '@tsai-platform/core';
 
+@Global()
 @Module({
   imports: [
     RouterModule.register([
@@ -14,7 +16,7 @@ import { RouterModule } from '@nestjs/core';
     ]),
   ],
   controllers: [WechatOauthController, CaptchaController],
-  providers: [CaptchaService],
+  providers: [AdminManager, CaptchaService],
   exports: [],
 })
 export class CommModule {}

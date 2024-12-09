@@ -13,20 +13,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppService = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
+const ucenter_1 = require("@tsai-platform/ucenter");
 const common_2 = require("@tsailab/common");
 let AppService = AppService_1 = class AppService {
-    constructor(config) {
+    constructor(config, userService) {
         this.config = config;
+        this.userService = userService;
         this.logger = new common_1.Logger(AppService_1.name);
     }
     health() {
         const name = this.config.get('app.name', 'Tsai Application');
+        this.userService.getById(1);
         return `${name} ${(0, common_2.formatDateTime)()}\<br\> Hey gay,I am running...!`;
     }
 };
 exports.AppService = AppService;
 exports.AppService = AppService = AppService_1 = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [config_1.ConfigService])
+    __metadata("design:paramtypes", [config_1.ConfigService,
+        ucenter_1.UserService])
 ], AppService);
 //# sourceMappingURL=app.service.js.map

@@ -1,3 +1,5 @@
+import { UsernoInfo } from '../../types';
+
 export class RandomHelper {
   static shortId() {
     const prex1 = (Math.random() * Math.pow(36, 1)) | 0;
@@ -28,7 +30,7 @@ export class RandomHelper {
    * @param seeds array
    * @return string
    */
-  static buildUno(seqno: number, seeds: string[]): string {
+  static buildUno(seqno: number, seeds: string[]): UsernoInfo {
     if (!/[\d]{1,8}/.test(seqno.toString()))
       throw new Error(`seqno [${seqno}] more than 8 length.`);
 
@@ -46,7 +48,13 @@ export class RandomHelper {
     const checkDigit = `00${parseInt(seed) % 17}`.slice(-2);
 
     const no = `00000000${seqno}`.slice(-8);
-    return Number(`${checkDigit}${seed}${no}`).toString(36);
+    const value = `${checkDigit}${seed}${no}`;
+    const uno = Number(value).toString(36);
+
+    return {
+      uno,
+      value,
+    };
   }
 
   /**

@@ -1,17 +1,37 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { DictService, SystemService } from './services';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { SysDictEntity, SysDictItemEntity } from './entities';
 
-@Module({})
+import { TypeOrmModule } from '@nestjs/typeorm';
+import {
+  NextNoEntity,
+  SysDictEntity,
+  SysDictItemEntity,
+  SystemUserEntity,
+} from './entities';
+import {
+  DictService,
+  NextNoService,
+  SysUserService,
+} from './services/expose.services';
+
+@Module({
+  providers: [],
+  exports: [],
+})
 export class SystemModule {
   static async forRoot(isGlobal: boolean = true): Promise<DynamicModule> {
     return {
       module: SystemModule,
       global: isGlobal,
-      imports: [TypeOrmModule.forFeature([SysDictEntity, SysDictItemEntity])],
-      providers: [DictService, SystemService],
-      exports: [DictService, SystemService],
+      imports: [
+        TypeOrmModule.forFeature([
+          NextNoEntity,
+          SysDictEntity,
+          SysDictItemEntity,
+          SystemUserEntity,
+        ]),
+      ],
+      providers: [DictService, NextNoService, SysUserService],
+      exports: [DictService, NextNoService, SysUserService],
     };
   }
 }

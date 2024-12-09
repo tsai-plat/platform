@@ -26,15 +26,15 @@ export type PaginationDataType<T = any> = {
 /**
  * UI selections
  */
-export type SelectorOptionsType<T=string|number>= {
+export type SelectorOptionsType<T = string | number> = {
   label: string;
   value: T;
   disabled?: boolean;
   actived?: boolean;
   icon?: string;
   extra?: {
-    id:number;
-    orgno?:string;
-    [k:string]:any
+    id: number;
+    orgno?: string;
+    [k: string]: any;
   };
-}
+};

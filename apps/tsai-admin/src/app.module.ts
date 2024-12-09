@@ -10,14 +10,14 @@ import {
   YamlConfigLoader,
 } from '@tsai-platform/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UcenterModule } from '@tsai-platform/ucenter';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-
 import { NodeRedisModule } from '@tsailab/node-redis';
-import { SystemModule } from '@tsailab/system';
 
 import { CommModule } from './common/comm.module';
 import { ApiModule } from './api/api.module';
+import { AppCoreModule } from './appcore/app-core.module';
+import { UcenterModule } from '@tsai-platform/ucenter';
+import { SystemModule } from '@tsailab/system';
 
 @Module({
   imports: [
@@ -42,10 +42,11 @@ import { ApiModule } from './api/api.module';
     TypeOrmModule.forRootAsync({
       useClass: MysqlConfigFactory,
     }),
-    SystemModule.forRoot(),
     UcenterModule.forRoot({ isGlobal: true }),
-    CommModule,
+    SystemModule.forRoot(true),
+    AppCoreModule,
     ApiModule,
+    CommModule,
   ],
   controllers: [AppController],
   providers: [
