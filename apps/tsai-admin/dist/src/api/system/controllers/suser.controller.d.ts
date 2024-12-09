@@ -1,5 +1,6 @@
 import { SysUserManager } from '../services';
 import { QueryAdminUserReqDto } from '../dtos';
+import { CreateSUserModel } from '@tsailab/system/dist/models/suser.model';
 export declare class SuserController {
     private readonly sysManager;
     constructor(sysManager: SysUserManager);
@@ -12,4 +13,5 @@ export declare class SuserController {
         page?: number;
         keywords?: string;
     }>;
+    addSystemUser(user: CreateSUserModel): Promise<import("@tsailab/system").SystemUserEntity>;
 }

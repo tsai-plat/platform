@@ -34,7 +34,7 @@ export class NextNoService {
     batchSize: number,
     locked?: boolean,
   ): Promise<number> {
-    if (batchSize <= 0 || batchSize > 5000)
+    if (batchSize <= 0 || batchSize > 10000)
       throw BizException.IllegalParamterError(`Max batch size require 1~5000`);
 
     const qb = this.nextnoRepository.createQueryBuilder();
@@ -57,7 +57,6 @@ export class NextNoService {
     }
 
     async function batch(curr: number, count: number): Promise<number> {
-      if (count <= 0) return curr;
       const values: Array<Partial<NextNoEntity>> = [];
       let start = curr;
       for (let j = 0; j < count; j++) {
@@ -74,10 +73,12 @@ export class NextNoService {
     }
 
     let left = batchSize;
+
     while (left > 0) {
-      const c = left > this.maxBatch ? this.maxBatch : this.maxBatch - left;
+      const c = left > this.maxBatch ? this.maxBatch : left;
       nextno = await batch(nextno, c);
-      left = left - this.maxBatch;
+
+      left = left - c;
     }
 
     return nextno;
@@ -94,5 +95,30 @@ export class NextNoService {
 
     if (!row) return 1;
     return Number(+row.no).valueOf();
+  }
+
+  async updateNextnoUsed(biztype: number, nextno: number) {
+    if (!biztype || biztype < 0)
+      throw BizException.IllegalParamterError(`biztype required.`);
+
+    const qb = this.nextnoRepository.createQueryBuilder();
+
+    const find = await qb.where({ no: nextno, biztype }).getOne();
+    if (find) {
+      const { affected } = await qb
+        .update(NextNoEntity)
+        .set({ used: true })
+        .where('no = :no AND biztype = :biztype', { no: nextno, biztype })
+        .execute();
+
+      return affected > 0;
+    }
+    await qb.insert().into(NextNoEntity).values({
+      no: nextno,
+      biztype,
+      locked: false,
+      used: true,
+    });
+    return true;
   }
 }

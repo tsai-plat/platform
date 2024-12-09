@@ -41,7 +41,7 @@ export class SystemUserEntity extends CommonEntity implements IUser {
     type: 'varchar',
     length: 20,
     nullable: true,
-    name: 'mobile',
+    name: 'phone',
     comment: 'phone number',
   })
   phone: string;

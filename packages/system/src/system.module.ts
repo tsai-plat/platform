@@ -10,6 +10,7 @@ import {
 import {
   DictService,
   NextNoService,
+  SystemConfigService,
   SysUserService,
 } from './services/expose.services';
 
@@ -30,8 +31,18 @@ export class SystemModule {
           SystemUserEntity,
         ]),
       ],
-      providers: [DictService, NextNoService, SysUserService],
-      exports: [DictService, NextNoService, SysUserService],
+      providers: [
+        DictService,
+        NextNoService,
+        SystemConfigService,
+        SysUserService,
+      ],
+      exports: [
+        DictService,
+        NextNoService,
+        SystemConfigService,
+        SysUserService,
+      ],
     };
   }
 }

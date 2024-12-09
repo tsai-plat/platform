@@ -14,10 +14,12 @@ exports.SysUserManager = void 0;
 const system_1 = require("@tsailab/system");
 const ucenter_1 = require("@tsai-platform/ucenter");
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
 let SysUserManager = SysUserManager_1 = class SysUserManager {
-    constructor(sysUserService, userService) {
+    constructor(sysUserService, userService, config) {
         this.sysUserService = sysUserService;
         this.userService = userService;
+        this.config = config;
         this.logger = new common_1.Logger(SysUserManager_1.name);
     }
     async queryList(dto, filterDeleted = true) {
@@ -29,11 +31,19 @@ let SysUserManager = SysUserManager_1 = class SysUserManager {
             r,
         };
     }
+    async createSystemUser(dto) {
+        const pw = await this.config.get('system.defaultPassword', 'Admin@tsai');
+        if (!dto.password?.length) {
+            dto.password = pw;
+        }
+        return await this.sysUserService.createSuser(dto);
+    }
 };
 exports.SysUserManager = SysUserManager;
 exports.SysUserManager = SysUserManager = SysUserManager_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [system_1.SysUserService,
-        ucenter_1.UserService])
+        ucenter_1.UserService,
+        config_1.ConfigService])
 ], SysUserManager);
 //# sourceMappingURL=sysuser.manager.js.map

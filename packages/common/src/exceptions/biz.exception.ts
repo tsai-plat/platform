@@ -64,4 +64,30 @@ export class BizException extends Error {
 
     return new BizException(code, localeMessage);
   }
+
+  /**
+   *
+   * @param message
+   * @param options
+   *
+   */
+  static ParameterInvalidError(
+    message: string = '',
+    options?: BizErrorOptionType,
+  ) {
+    const { locale = 'enUS' } = options || {};
+    let localeMessage = message;
+    const code = ErrorCodeEnum.PARAMS_INVALID;
+    if (!localeMessage?.length) {
+      const messages: Record<number, string> = localeMessages(locale);
+
+      if (messages[code.valueOf()]) {
+        localeMessage = messages[code.valueOf()];
+      } else {
+        localeMessage = `Input parameter invalid.`;
+      }
+    }
+
+    return new BizException(code, localeMessage);
+  }
 }

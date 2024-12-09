@@ -18,12 +18,16 @@ const swagger_1 = require("@nestjs/swagger");
 const api_routes_1 = require("../../api.routes");
 const services_1 = require("../services");
 const dtos_1 = require("../dtos");
+const suser_model_1 = require("@tsailab/system/dist/models/suser.model");
 let SuserController = class SuserController {
     constructor(sysManager) {
         this.sysManager = sysManager;
     }
     list(queryDto) {
         return this.sysManager.queryList(queryDto);
+    }
+    addSystemUser(user) {
+        return this.sysManager.createSystemUser(user);
     }
 };
 exports.SuserController = SuserController;
@@ -35,6 +39,14 @@ __decorate([
     __metadata("design:paramtypes", [dtos_1.QueryAdminUserReqDto]),
     __metadata("design:returntype", void 0)
 ], SuserController.prototype, "list", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: '添加用户' }),
+    (0, common_1.Post)('create'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [suser_model_1.CreateSUserModel]),
+    __metadata("design:returntype", void 0)
+], SuserController.prototype, "addSystemUser", null);
 exports.SuserController = SuserController = __decorate([
     (0, swagger_1.ApiTags)(`${api_routes_1.TsaiAdminModuleRoutes.systemRoute.desc}: 系统管理员`),
     (0, common_1.Controller)('suser'),

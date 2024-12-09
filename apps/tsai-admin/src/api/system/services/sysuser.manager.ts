@@ -2,6 +2,8 @@ import { SysUserService } from '@tsailab/system';
 import { QueryAdminUserReqDto } from '../dtos';
 import { UserService } from '@tsai-platform/ucenter';
 import { Injectable, Logger } from '@nestjs/common';
+import { CreateSUserModel } from '@tsailab/system/dist/models/suser.model';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class SysUserManager {
@@ -9,6 +11,7 @@ export class SysUserManager {
   constructor(
     private readonly sysUserService: SysUserService,
     private readonly userService: UserService,
+    private readonly config: ConfigService,
   ) {}
 
   async queryList(dto: QueryAdminUserReqDto, filterDeleted = true) {
@@ -20,5 +23,17 @@ export class SysUserManager {
       filterDeleted,
       r,
     };
+  }
+
+  async createSystemUser(dto: CreateSUserModel) {
+    const pw = await this.config.get<string>(
+      'system.defaultPassword',
+      'Admin@tsai',
+    );
+
+    if (!dto.password?.length) {
+      dto.password = pw;
+    }
+    return await this.sysUserService.createSuser(dto);
   }
 }

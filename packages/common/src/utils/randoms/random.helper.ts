@@ -39,6 +39,10 @@ export class RandomHelper {
       throw new Error(`Seeds [${notMaches.join(',')}] not 4 digits.`);
     }
 
+    if (!seeds.length) {
+      seeds.push('444');
+    }
+
     const range = seeds.length;
 
     const idx = Math.floor(Math.random() * range);

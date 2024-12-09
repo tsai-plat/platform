@@ -1,8 +1,9 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { TsaiAdminModuleRoutes } from 'src/api/api.routes';
 import { SysUserManager } from '../services';
 import { QueryAdminUserReqDto } from '../dtos';
+import { CreateSUserModel } from '@tsailab/system/dist/models/suser.model';
 
 @ApiTags(`${TsaiAdminModuleRoutes.systemRoute.desc}: 系统管理员`)
 @Controller('suser')
@@ -13,5 +14,11 @@ export class SuserController {
   @Get('list')
   list(@Query() queryDto: QueryAdminUserReqDto) {
     return this.sysManager.queryList(queryDto);
+  }
+
+  @ApiOperation({ summary: '添加用户' })
+  @Post('create')
+  addSystemUser(@Body() user: CreateSUserModel) {
+    return this.sysManager.createSystemUser(user);
   }
 }
