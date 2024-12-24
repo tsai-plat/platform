@@ -14,7 +14,6 @@ const config_1 = require("@nestjs/config");
 const core_1 = require("@tsai-platform/core");
 const typeorm_1 = require("@nestjs/typeorm");
 const core_2 = require("@nestjs/core");
-const comm_module_1 = require("./common/comm.module");
 const api_module_1 = require("./api/api.module");
 const app_core_module_1 = require("./appcore/app-core.module");
 const ucenter_1 = require("@tsai-platform/ucenter");
@@ -54,7 +53,6 @@ exports.AppModule = AppModule = __decorate([
             system_1.SystemModule.forRoot(true),
             app_core_module_1.AppCoreModule,
             api_module_1.ApiModule,
-            comm_module_1.CommModule,
             auth_module_1.AuthModule,
         ],
         controllers: [app_controller_1.AppController],

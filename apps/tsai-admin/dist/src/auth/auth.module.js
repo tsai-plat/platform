@@ -8,14 +8,49 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthModule = void 0;
 const common_1 = require("@nestjs/common");
+const auth_controller_1 = require("./controllers/auth.controller");
+const passport_1 = require("@nestjs/passport");
+const jwt_1 = require("@nestjs/jwt");
+const config_1 = require("@nestjs/config");
+const auth_constants_1 = require("./auth.constants");
+const core_1 = require("@nestjs/core");
+const captcha_controller_1 = require("./controllers/captcha.controller");
+const core_2 = require("@tsai-platform/core");
+const auth_helper_1 = require("./services/auth.helper");
+const auth_service_1 = require("./services/auth.service");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Global)(),
     (0, common_1.Module)({
-        imports: [],
-        providers: [],
+        imports: [
+            core_1.RouterModule.register([
+                {
+                    path: 'auth',
+                    module: AuthModule,
+                },
+            ]),
+            passport_1.PassportModule.register({
+                defaultStrategy: 'jwt',
+                property: 'user',
+                session: true,
+            }),
+            jwt_1.JwtModule.registerAsync({
+                useFactory: (config) => ({
+                    secret: config.get(`${auth_constants_1.JWT_YAML_CONF_KEY}.secretKey`),
+                    signOptions: {
+                        issuer: config.get(`${auth_constants_1.JWT_YAML_CONF_KEY}.iss`, 'tsailab'),
+                        subject: config.get(`${auth_constants_1.JWT_YAML_CONF_KEY}.sub`, 'ts-admin'),
+                        audience: config.get(`${auth_constants_1.JWT_YAML_CONF_KEY}.sub`, 'admin-ui'),
+                        ignoreExpiration: true,
+                    },
+                }),
+                inject: [config_1.ConfigService],
+            }),
+        ],
+        controllers: [auth_controller_1.AuthController, captcha_controller_1.CaptchaController],
+        providers: [auth_helper_1.AuthHelper, core_2.CaptchaService, auth_service_1.AuthService],
         exports: [],
     })
 ], AuthModule);

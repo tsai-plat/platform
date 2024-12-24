@@ -4,7 +4,7 @@ export type LotoAppListener = {
   name: string;
   url: string;
 };
-
+export type LotoCookiesType = 'captcha-code' | 'sms-code';
 export type LotoHeaderKeyType = 'x-loto-key' | 'x-loto-reqid';
 
 export type LotoHeadersType = {

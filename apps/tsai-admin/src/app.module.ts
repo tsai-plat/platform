@@ -12,7 +12,6 @@ import {
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 
-import { CommModule } from './common/comm.module';
 import { ApiModule } from './api/api.module';
 import { AppCoreModule } from './appcore/app-core.module';
 import { UcenterModule } from '@tsai-platform/ucenter';
@@ -52,7 +51,6 @@ import { AuthModule } from './auth/auth.module';
     SystemModule.forRoot(true),
     AppCoreModule,
     ApiModule,
-    CommModule,
     AuthModule,
   ],
   controllers: [AppController],

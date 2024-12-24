@@ -60,10 +60,11 @@ export class HttpExceptionFilter<T> implements ExceptionFilter {
 
       const res = validEx.getResponse();
       response.header('Content-type', CONTENT_TYPE_HEADER);
-      response.status(validEx.getStatus ?? HttpStatus.BAD_REQUEST);
+      response.status(HttpStatus.BAD_REQUEST);
       response.send(res);
     } else {
-      const statusCode = status || response?.statusCode;
+      const statusCode =
+        status || response?.statusCode || HttpStatus.INTERNAL_SERVER_ERROR;
       response.status(statusCode || HttpStatus.INTERNAL_SERVER_ERROR);
       response.header('Content-type', CONTENT_TYPE_HEADER);
       response.send({

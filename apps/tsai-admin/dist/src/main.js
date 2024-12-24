@@ -8,17 +8,26 @@ const helmet_1 = require("helmet");
 const swagger_1 = require("@nestjs/swagger");
 const package_json_1 = require("../package.json");
 const common_2 = require("@nestjs/common");
+const cookieParser = require("cookie-parser");
 const chalk = require("chalk");
 const core_2 = require("@tsai-platform/core");
+const auth_constants_1 = require("./auth/auth.constants");
+const runtimes_1 = require("./runtimes");
 async function bootstrap() {
     const listeners = [];
-    const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    const httpsOptions = process.env.STAGE === 'dev' ? (0, runtimes_1.sslOptionsLoad)() : undefined;
+    const app = await core_1.NestFactory.create(app_module_1.AppModule, {
+        httpsOptions: httpsOptions,
+    });
     const configService = app.get(config_1.ConfigService);
     const appPort = configService.get('app.server.port', 38964);
     const apiPrefix = configService.get('app.prefix', 'v1');
     const swaggerEnabled = configService.get('swagger.enabled', 'off');
     const docTitle = configService.get('app.name', package_json_1.name);
-    app.enableCors();
+    app.enableCors({
+        credentials: true,
+        origin: true,
+    });
     app.use((0, helmet_1.default)());
     if ((0, common_1.convertYes)(swaggerEnabled)) {
         const docDesc = configService.get('swagger.docDesc', package_json_1.description);
@@ -42,6 +51,8 @@ async function bootstrap() {
             },
         ],
     });
+    const { secret } = await configService.get('cookie', auth_constants_1.defaultCookieOpts);
+    await app.use(cookieParser(secret));
     app.useGlobalPipes(new common_2.ValidationPipe({
         transform: true,
         exceptionFactory: core_2.validationExceptionFactory,

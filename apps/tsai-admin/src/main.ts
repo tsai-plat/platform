@@ -1,23 +1,37 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { convertYes, LotoAppListener } from '@tsailab/common/';
+import {
+  convertYes,
+  CookieConfigSchema,
+  LotoAppListener,
+} from '@tsailab/common/';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { version, author, name, description } from '../package.json';
 import { RequestMethod, ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 import * as chalk from 'chalk';
+
 import {
   HttpExceptionFilter,
   validationExceptionFactory,
 } from '@tsai-platform/core';
+import { defaultCookieOpts } from './auth/auth.constants';
+import { sslOptionsLoad } from './runtimes';
 
 /**
  * Tsailab Application bootstrap
  */
 async function bootstrap() {
   const listeners: Array<LotoAppListener> = [];
-  const app = await NestFactory.create(AppModule);
+
+  const httpsOptions =
+    process.env.STAGE === 'dev' ? sslOptionsLoad() : undefined;
+
+  const app = await NestFactory.create(AppModule, {
+    httpsOptions: httpsOptions,
+  });
   const configService = app.get(ConfigService);
 
   const appPort = configService.get<number>('app.server.port', 38964);
@@ -29,7 +43,10 @@ async function bootstrap() {
   const docTitle = configService.get<string>('app.name', name);
 
   //允许跨域请求
-  app.enableCors();
+  app.enableCors({
+    credentials: true,
+    origin: true,
+  });
   // Web漏洞的
   app.use(helmet());
 
@@ -62,6 +79,13 @@ async function bootstrap() {
       },
     ],
   });
+
+  // cookie
+  const { secret } = await configService.get<CookieConfigSchema>(
+    'cookie',
+    defaultCookieOpts,
+  );
+  await app.use(cookieParser(secret));
 
   app.useGlobalPipes(
     new ValidationPipe({
