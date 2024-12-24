@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CacheKeyHelper, PlatformEnum } from '@tsailab/common';
-import { NodeRedisService } from '@tsailab/node-redis';
+
 import * as svgCaptcha from 'svg-captcha-fixed';
+import { RedisService } from '@tsailab/ioredis-mq';
 
 @Injectable()
 export class CaptchaService {
   protected readonly expires: number = 60;
 
-  constructor(private readonly redisSevice: NodeRedisService) {}
+  constructor(private readonly redisSevice: RedisService) {}
 
   async getCaptchaMath(
     nonce: string,

@@ -9,19 +9,21 @@ export type ITokenBase = {
 };
 
 export type IAccessBase = {
+  version?: string;
   jti: string; // 32 位随机值防止重放攻击
   cid: string; // userno base36
-  version?: string;
+  clit?: string; // client tag
   nonce?: string; // 用户判重标识
 };
 
 export type JwtAccessPayload = IAccessBase & {
   username: string; //用户名
   avatar?: string; // 头像
-  uid?: number; // userid
+  id?: number; // userid
   orgno?: string;
   acctype?: AccountType;
   scopes?: Array<any>; // 扩展权限
+  [k: string]: any;
 } & Partial<ITokenBase>;
 
 export type OAuth20AccessPayload = IAccessBase & {

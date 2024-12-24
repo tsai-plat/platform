@@ -14,12 +14,14 @@ const config_1 = require("@nestjs/config");
 const core_1 = require("@tsai-platform/core");
 const typeorm_1 = require("@nestjs/typeorm");
 const core_2 = require("@nestjs/core");
-const node_redis_1 = require("@tsailab/node-redis");
 const comm_module_1 = require("./common/comm.module");
 const api_module_1 = require("./api/api.module");
 const app_core_module_1 = require("./appcore/app-core.module");
 const ucenter_1 = require("@tsai-platform/ucenter");
 const system_1 = require("@tsailab/system");
+const ioredis_mq_1 = require("@tsailab/ioredis-mq");
+const common_2 = require("@tsailab/common");
+const auth_module_1 = require("./auth/auth.module");
 let AppModule = class AppModule {
     configure(_consumer) { }
 };
@@ -36,14 +38,14 @@ exports.AppModule = AppModule = __decorate([
                     abortEarly: true,
                 },
             }),
-            node_redis_1.NodeRedisModule.forRoot({
-                config: {
-                    host: '172.20.0.1',
-                    port: 6379,
-                    db: 8,
-                    ttl: 5,
-                    password: 'admin123',
+            ioredis_mq_1.IORedisMQModule.forRootAsync({
+                useFactory: (config) => {
+                    const ioredisOpts = config.get('cache.ioredis');
+                    if (!ioredisOpts)
+                        throw common_2.BizException.createError(common_2.ErrorCodeEnum.SERVICE_UNAVAILABLE, `IORedis configuration error.Please check yaml key [cache.ioredis]`);
+                    return ioredisOpts;
                 },
+                inject: [config_1.ConfigService],
             }),
             typeorm_1.TypeOrmModule.forRootAsync({
                 useClass: core_1.MysqlConfigFactory,
@@ -53,6 +55,7 @@ exports.AppModule = AppModule = __decorate([
             app_core_module_1.AppCoreModule,
             api_module_1.ApiModule,
             comm_module_1.CommModule,
+            auth_module_1.AuthModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [

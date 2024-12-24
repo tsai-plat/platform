@@ -1,3 +1,5 @@
+import { JwtAlgorithm } from './crypto.types';
+
 export type StageEnvType = 'prod' | 'dev' | 'test' | 'stage';
 
 export type AppConfigSchema = {
@@ -43,4 +45,17 @@ export type GlobalConfigSchema = {
     [c: string]: any;
   };
   [k: string]: any;
+};
+
+/**
+ * Jwt config
+ */
+export type JwtConfigSchmeaOptions = {
+  algorithm?: JwtAlgorithm;
+  version?: string;
+  encrptRounds?: number;
+  iss: string;
+  sub: string;
+  secretKey: string;
+  expirein?: string | number;
 };

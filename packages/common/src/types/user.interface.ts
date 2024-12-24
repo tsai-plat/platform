@@ -1,7 +1,11 @@
 import { AccountType, PlatformEnum, UserStatusEnum } from '../enums';
 
+/**
+ * clit:string;
+ */
 export interface IUserBase {
   id: number;
+  clit?: string;
   userno: string; //unique in global
   username: string;
   phone: string;
@@ -18,6 +22,7 @@ export interface IUser extends IUserBase {
   remark?: string;
   openid?: string;
   unionid?: string;
+  orgno?: string;
   [k: string]: any;
 }
 

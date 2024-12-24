@@ -1,3 +1,5 @@
+import { AccountType, AccountTypeEnum } from '../enums';
+import { CacheKeyScopeType } from '../types';
 import { CacheKeyScope } from './cache.scopes';
 
 export const CacheKeySplitor = ':';
@@ -16,12 +18,32 @@ export class CacheKeyHelper {
     return combineCacheKey(...[scope, id]);
   }
 
-  static buildSysTokenKey(uid: number): string {
-    return combineCacheKey(CacheKeyScope.SYSTEM_TOKEN, 'uid', uid);
-  }
+  /**
+   *
+   * @param uid required
+   * @param acctype default custom
+   * @returns string
+   */
+  static buildAccessTokenKey(
+    uid: number,
+    clit: string,
+    acctype: AccountType = AccountTypeEnum.CUSTOM,
+  ) {
+    let tkScope: CacheKeyScopeType;
+    switch (acctype) {
+      case AccountTypeEnum.SYSTEM:
+        tkScope = CacheKeyScope.SYSTEM_TOKEN;
+        break;
+      case AccountTypeEnum.CUSTOM:
+        tkScope = CacheKeyScope.CUSTOM_TOKEN;
+        break;
 
-  static buildCustomTokenKey(uid: number): string {
-    return combineCacheKey(CacheKeyScope.CUSTOM_TOKEN, 'uid', uid);
+      default:
+        tkScope = CacheKeyScope.GUEST_TOKEN;
+        break;
+    }
+
+    return combineCacheKey(tkScope, 'uid', uid, clit);
   }
 
   static buildCaptchaKey(uuid: string | number, props: string = ''): string {

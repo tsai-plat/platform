@@ -12,6 +12,20 @@ export class RandomHelper {
     return `${prefix}_${first}${second}`;
   }
 
+  /**
+   * random 5~6 length string
+   * @returns state
+   */
+  static randomState(): string {
+    const firstPart = (Math.random() * Math.pow(36, 4)) | 0;
+    const secondPart = (Math.random() * Math.pow(36, 4)) | 0;
+
+    let str = `${firstPart}0000`.slice(0, 4);
+    str = str + `0000${secondPart}`.slice(-4);
+
+    return Number(str).toString(36);
+  }
+
   static genRandomCacheKey() {
     const prex1 = (Math.random() * Math.pow(36, 1)) | 0;
     const prex2 = (Math.random() * Math.pow(36, 1)) | 0;

@@ -2,7 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import {
   ApiTransformInterceptor,
   isProdRuntime,
@@ -11,13 +11,15 @@ import {
 } from '@tsai-platform/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { NodeRedisModule } from '@tsailab/node-redis';
 
 import { CommModule } from './common/comm.module';
 import { ApiModule } from './api/api.module';
 import { AppCoreModule } from './appcore/app-core.module';
 import { UcenterModule } from '@tsai-platform/ucenter';
 import { SystemModule } from '@tsailab/system';
+import { IORedisModuleOptions, IORedisMQModule } from '@tsailab/ioredis-mq';
+import { BizException, ErrorCodeEnum } from '@tsailab/common';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -30,14 +32,18 @@ import { SystemModule } from '@tsailab/system';
         abortEarly: true,
       },
     }),
-    NodeRedisModule.forRoot({
-      config: {
-        host: '172.20.0.1',
-        port: 6379,
-        db: 8,
-        ttl: 5,
-        password: 'admin123',
+    IORedisMQModule.forRootAsync({
+      useFactory: (config: ConfigService) => {
+        const ioredisOpts = config.get('cache.ioredis');
+        if (!ioredisOpts)
+          throw BizException.createError(
+            ErrorCodeEnum.SERVICE_UNAVAILABLE,
+            `IORedis configuration error.Please check yaml key [cache.ioredis]`,
+          );
+
+        return ioredisOpts as unknown as IORedisModuleOptions;
       },
+      inject: [ConfigService],
     }),
     TypeOrmModule.forRootAsync({
       useClass: MysqlConfigFactory,
@@ -47,6 +53,7 @@ import { SystemModule } from '@tsailab/system';
     AppCoreModule,
     ApiModule,
     CommModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [

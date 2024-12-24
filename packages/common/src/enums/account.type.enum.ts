@@ -1,6 +1,7 @@
 export enum AccountTypeEnum {
   SYSTEM = 'system',
   CUSTOM = 'custom',
+  GUEST = 'guest',
 }
 
 export type AccountType = 'system' | 'custom' | string;
@@ -8,6 +9,7 @@ export type AccountType = 'system' | 'custom' | string;
 const accountTypeMessages: Record<AccountType, string> = {
   [AccountTypeEnum.SYSTEM]: '系统用户',
   [AccountTypeEnum.CUSTOM]: '终端用户',
+  [AccountTypeEnum.GUEST]: '客户',
 };
 
 export function getAccountTypeMessage(
