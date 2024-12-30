@@ -5,10 +5,13 @@ import { SuserController } from './controllers/suser.controller';
 import { NextNoManager, SysUserManager } from './services';
 
 import { NextNoController } from './controllers/next-no.controller';
+import { RegionController } from './controllers/region.controller';
+import { OrganizationController } from './controllers/organization.controller';
+import { RoleController } from './controllers/role.controller';
 
 @Module({
   imports: [],
-  controllers: [DictController, SuserController, NextNoController],
+  controllers: [DictController, SuserController, NextNoController, RegionController, OrganizationController, RoleController],
   providers: [DictManagerService, SysUserManager, NextNoManager],
 })
 export class SysAdminModule {}

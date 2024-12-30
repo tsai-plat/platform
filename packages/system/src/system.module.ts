@@ -3,8 +3,11 @@ import { DynamicModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   NextNoEntity,
+  OrganizationEntity,
+  RoleEntity,
   SysDictEntity,
   SysDictItemEntity,
+  SystemRegionEntity,
   SystemUserEntity,
 } from './entities';
 import {
@@ -12,7 +15,10 @@ import {
   NextNoService,
   SystemConfigService,
   SysUserService,
-} from './services/expose.services';
+} from './services';
+import { RegionService } from './services/region.service';
+import { OrganizationService } from './services/organization.service';
+import { RoleService } from './services/role.service';
 
 @Module({
   providers: [],
@@ -29,6 +35,9 @@ export class SystemModule {
           SysDictEntity,
           SysDictItemEntity,
           SystemUserEntity,
+          SystemRegionEntity,
+          OrganizationEntity,
+          RoleEntity,
         ]),
       ],
       providers: [
@@ -36,12 +45,18 @@ export class SystemModule {
         NextNoService,
         SystemConfigService,
         SysUserService,
+        RegionService,
+        OrganizationService,
+        RoleService,
       ],
       exports: [
         DictService,
         NextNoService,
         SystemConfigService,
         SysUserService,
+        RegionService,
+        OrganizationService,
+        RoleService,
       ],
     };
   }

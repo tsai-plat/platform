@@ -1,4 +1,4 @@
-import { CacheKeyEnumType } from '../types';
+import { CacheKeyEnumType } from '@tsailab/core-types';
 
 export const CacheKeyScope: CacheKeyEnumType = {
   SYSTEM_TOKEN: 'systk',

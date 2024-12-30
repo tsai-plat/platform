@@ -157,6 +157,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], DictController.prototype, "getDictItemSelections", null);
 exports.DictController = DictController = __decorate([
+    (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiTags)(`${api_routes_1.TsaiAdminModuleRoutes.systemRoute.name}: 数据字典`),
     (0, common_1.Controller)('dict'),
     __metadata("design:paramtypes", [dict_manager_service_1.DictManagerService,

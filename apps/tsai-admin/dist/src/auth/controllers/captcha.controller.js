@@ -20,6 +20,7 @@ const swagger_1 = require("@nestjs/swagger");
 const core_1 = require("@tsai-platform/core");
 const common_2 = require("@tsailab/common");
 const auth_constants_1 = require("../auth.constants");
+const core_types_1 = require("@tsailab/core-types");
 let CaptchaController = CaptchaController_1 = class CaptchaController {
     constructor(captchaService, config) {
         this.captchaService = captchaService;
@@ -32,7 +33,7 @@ let CaptchaController = CaptchaController_1 = class CaptchaController {
         }
         await this.setCaptchaCookie(res, nonce);
         const captcha = await this.captchaService.getCaptchaMath(nonce);
-        res.type(common_2.HttpContentTypeEnum.svgXml);
+        res.type(core_types_1.HttpContentTypeEnum.svgXml);
         res.status(common_1.HttpStatus.OK);
         res.send(captcha);
     }
@@ -49,6 +50,7 @@ let CaptchaController = CaptchaController_1 = class CaptchaController {
 };
 exports.CaptchaController = CaptchaController;
 __decorate([
+    (0, core_1.PublicApi)(),
     (0, swagger_1.ApiOperation)({
         summary: '获取验证图片',
     }),

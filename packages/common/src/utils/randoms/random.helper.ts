@@ -1,4 +1,7 @@
-import { UsernoInfo } from '../../types';
+export interface UsernoInfo {
+  uno: string;
+  value: string;
+}
 
 export class RandomHelper {
   static shortId() {

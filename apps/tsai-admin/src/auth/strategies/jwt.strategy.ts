@@ -1,26 +1,34 @@
-import { Logger } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { JWT_YAML_CONF_KEY, SYSTEM_TOKEN_HEADER } from '../auth.constants';
-import { IUser, JwtAccessPayload } from '@tsailab/common';
+import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';
+import { JWT_YAML_CONF_KEY } from '../auth.constants';
 import { AuthHelper } from '../services/auth.helper';
+import { IUser, JwtAccessPayload } from '@tsailab/core-types';
 
 /**
  * jwt strategy for validate jwt token
  */
+@Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   protected logger = new Logger(JwtStrategy.name);
+
+  private readonly singleton;
 
   constructor(
     private readonly config: ConfigService,
     private readonly authHelper: AuthHelper,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromHeader(SYSTEM_TOKEN_HEADER),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: true,
       secretOrKey: config.get<string>(`${JWT_YAML_CONF_KEY}.secretKey`, null),
     });
+    this.singleton = config.get<boolean>(
+      `${JWT_YAML_CONF_KEY}.singleton`,
+      false,
+    );
   }
 
   /**
@@ -28,12 +36,20 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * @param payload
    * @returns IUser or null
    */
-  async validate(payload: JwtAccessPayload) {
-    const { id, clit, acctype } = payload;
+  async validate(payload: JwtAccessPayload, done: VerifiedCallback) {
+    const { id, clit, acctype, jti } = payload;
     const cache = await this.authHelper.checkTokenExists(id, clit, acctype);
 
-    if (!cache) return null;
-    const { token: _, ...user } = cache;
-    return { ...user } as IUser;
+    if (!cache) return done(new UnauthorizedException(`登录已失效!`), null);
+    const { token, ...user } = cache;
+
+    if (this.singleton) {
+      const dePayload = await this.authHelper.decryptToken(token);
+
+      if (dePayload?.jti !== jti)
+        return done(new UnauthorizedException(`当前账号已在其他客户端登录!`));
+    }
+
+    return done(null, { ...user } as IUser);
   }
 }

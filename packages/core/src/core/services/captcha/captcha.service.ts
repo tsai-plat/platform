@@ -1,13 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import {
-  BizException,
-  CacheKeyHelper,
-  ErrorCodeEnum,
-  PlatformEnum,
-} from '@tsailab/common';
+import { BizException, CacheKeyHelper, ErrorCodeEnum } from '@tsailab/common';
 
 import * as svgCaptcha from 'svg-captcha-fixed';
 import { RedisService } from '@tsailab/ioredis-mq';
+import { PlatformEnum } from '@tsailab/core-types';
 
 @Injectable()
 export class CaptchaService {
@@ -45,7 +41,7 @@ export class CaptchaService {
     platform: PlatformEnum = PlatformEnum.SYSTEM_PLATFORM,
   ) {
     if (!value?.length) {
-      throw BizException.IllegalParamterError(`Require value`);
+      throw BizException.IllegalParamterError(`请填写验证码`);
     }
     if (!nonce?.length) {
       throw BizException.IllegalParamterError(`验证码nonce未传值.`);

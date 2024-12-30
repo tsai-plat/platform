@@ -7,3 +7,7 @@ export declare class QueryAccountSelectionParams {
     orgid?: number;
     useStatusCtrl?: boolean;
 }
+export declare class ResetSysUserPwdDto {
+    id: number;
+    password: string;
+}

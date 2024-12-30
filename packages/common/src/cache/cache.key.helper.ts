@@ -1,5 +1,8 @@
-import { AccountType, AccountTypeEnum } from '../enums';
-import { CacheKeyScopeType } from '../types';
+import {
+  AccountType,
+  AccountTypeEnum,
+  CacheKeyScopeType,
+} from '@tsailab/core-types';
 import { CacheKeyScope } from './cache.scopes';
 
 export const CacheKeySplitor = ':';

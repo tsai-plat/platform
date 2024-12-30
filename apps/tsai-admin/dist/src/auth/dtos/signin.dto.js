@@ -39,7 +39,7 @@ __decorate([
         required: true,
         description: `验证码`,
     }),
-    (0, class_validator_1.ValidateIf)((o) => !!o.isLock && !o?.code?.trim()?.length, {
+    (0, class_validator_1.ValidateIf)((o) => !o.isLock && !o?.code?.trim()?.length, {
         message: '请输入验证码',
     }),
     __metadata("design:type", String)

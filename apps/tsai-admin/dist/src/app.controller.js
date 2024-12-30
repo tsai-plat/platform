@@ -13,6 +13,7 @@ exports.AppController = void 0;
 const common_1 = require("@nestjs/common");
 const app_service_1 = require("./app.service");
 const swagger_1 = require("@nestjs/swagger");
+const core_1 = require("@tsai-platform/core");
 let AppController = class AppController {
     constructor(service) {
         this.service = service;
@@ -23,9 +24,11 @@ let AppController = class AppController {
 };
 exports.AppController = AppController;
 __decorate([
+    (0, core_1.PublicApi)(),
     (0, swagger_1.ApiOperation)({
         summary: 'health beat',
     }),
+    (0, core_1.IgnoreTransformAPI)(),
     (0, common_1.Get)('health'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),

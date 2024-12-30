@@ -1,10 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import {
-  IUserSession,
-  LotoHeaderEnum,
-  LotoHeadersType,
-  UuidGenerator,
-} from '@tsailab/common';
+import { LotoHeadersType, UuidGenerator } from '@tsailab/common';
+import { IUserSession, LotoHeaderEnum } from '@tsailab/core-types';
 import * as requestIP from 'request-ip';
 
 export const LotoHeaders = createParamDecorator(

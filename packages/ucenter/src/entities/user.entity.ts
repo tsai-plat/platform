@@ -1,13 +1,13 @@
-import {
-  AccountType,
-  CommonEntity,
-  PlatformEnum,
-  UserStatusEnum,
-} from '@tsailab/common';
+import { CommonEntity } from '@tsailab/common';
 
 import { Column, Entity, Index } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { IUser } from '@tsailab/common/types';
+import {
+  AccountType,
+  IUser,
+  PlatformEnum,
+  UserStatusEnum,
+} from '@tsailab/core-types';
 
 @Entity({
   name: 'loto_user',

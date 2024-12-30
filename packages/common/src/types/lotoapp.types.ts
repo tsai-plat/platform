@@ -1,5 +1,4 @@
-import { IUserSession } from './session.interface';
-
+import { type IUserSession } from '@tsailab/core-types';
 export type LotoAppListener = {
   name: string;
   url: string;

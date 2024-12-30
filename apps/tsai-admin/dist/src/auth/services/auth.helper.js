@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var AuthHelper_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthHelper = void 0;
 const config_1 = require("@nestjs/config");
@@ -16,12 +17,12 @@ const common_1 = require("@tsailab/common");
 const ioredis_mq_1 = require("@tsailab/ioredis-mq");
 const jwt_1 = require("@nestjs/jwt");
 const common_2 = require("@nestjs/common");
-const bcrypt = require("bcrypt");
-let AuthHelper = class AuthHelper {
+let AuthHelper = AuthHelper_1 = class AuthHelper {
     constructor(config, redis, jwt) {
         this.config = config;
         this.redis = redis;
         this.jwt = jwt;
+        this.logger = new common_2.Logger(AuthHelper_1.name);
         const opts = this.config.get(auth_constants_1.JWT_YAML_CONF_KEY);
         if (!opts || !opts.secretKey?.length) {
             throw common_1.BizException.ConfigurationError(`JWT configuration loading error.`);
@@ -61,29 +62,26 @@ let AuthHelper = class AuthHelper {
         return { ...user };
     }
     async encryptPassword(password) {
-        const salt = await bcrypt.genSalt(this.encrptRounds);
-        const enpw = await bcrypt.hash(password, salt);
-        return enpw;
+        return common_1.BcryptHelper.encryptPassword(password);
+    }
+    async comparePassword(password = '', encrypted = '') {
+        return await common_1.BcryptHelper.validPassword(password, encrypted);
     }
     async buildAccessPayload(user, state) {
         const { id, username, userno, acctype, avatar } = user;
-        const { version, iss, sub } = this.jwtOptions;
-        const now = new Date();
+        const { version } = this.jwtOptions;
         const jti = await common_1.UuidGenerator.createJti();
         const payload = {
-            jti,
             version,
+            jti,
             id,
+            aud: acctype,
             username,
             cid: userno,
-            iss,
-            sub,
             acctype,
             avatar,
-            iat: now.valueOf(),
+            nonce: state ?? common_1.RandomHelper.randomState(),
         };
-        if (state?.length)
-            payload.nonce = state;
         return payload;
     }
     getTokenKey(id, clit = '_', acctype) {
@@ -98,7 +96,7 @@ let AuthHelper = class AuthHelper {
     }
 };
 exports.AuthHelper = AuthHelper;
-exports.AuthHelper = AuthHelper = __decorate([
+exports.AuthHelper = AuthHelper = AuthHelper_1 = __decorate([
     (0, common_2.Injectable)(),
     __metadata("design:paramtypes", [config_1.ConfigService,
         ioredis_mq_1.RedisService,

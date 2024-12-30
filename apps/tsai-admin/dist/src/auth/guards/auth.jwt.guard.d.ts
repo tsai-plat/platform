@@ -10,5 +10,6 @@ export declare class AuthJwtGuard extends AuthJwtGuard_base implements IAuthGuar
     protected logger: Logger;
     constructor(reflector: Reflector, config: ConfigService);
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean>;
+    private extractTokenFromHeader;
 }
 export {};

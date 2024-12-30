@@ -1,7 +1,8 @@
-import { CommonEntity, StatusEnum } from '@tsailab/common';
+import { CommonEntity } from '@tsailab/common';
 import { Transform, Type } from 'class-transformer';
 import { Column, Entity, Index, OneToMany, Unique } from 'typeorm';
 import { SysDictItemEntity } from './dict.item.entity';
+import { StatusEnum } from '@tsailab/core-types';
 
 @Entity({
   name: 'sys_dict',

@@ -8,7 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { DictManagerService } from './dict-manager.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { TsaiAdminModuleRoutes } from 'src/api/api.routes';
 import {
   DictItemDefaultActivedModel,
@@ -25,6 +25,7 @@ import {
   UpdateStatusModel,
 } from '@tsailab/common';
 
+@ApiBearerAuth()
 @ApiTags(`${TsaiAdminModuleRoutes.systemRoute.name}: 数据字典`)
 @Controller('dict')
 export class DictController {

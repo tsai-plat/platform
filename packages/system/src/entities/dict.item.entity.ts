@@ -1,4 +1,5 @@
-import { CommonEntity, StatusEnum } from '@tsailab/common';
+import { CommonEntity } from '@tsailab/common';
+import { StatusEnum } from '@tsailab/core-types';
 import { Transform, Type } from 'class-transformer';
 import { Column, Entity } from 'typeorm';
 

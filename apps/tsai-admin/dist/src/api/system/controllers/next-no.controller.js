@@ -17,13 +17,13 @@ const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const api_routes_1 = require("../../api.routes");
 const services_1 = require("../services");
-const common_2 = require("@tsailab/common");
+const core_types_1 = require("@tsailab/core-types");
 let NextNoController = class NextNoController {
     constructor(manager) {
         this.manager = manager;
     }
     initNextBatch(size) {
-        return this.manager.batchInitNextnos(size, common_2.NextNoBiztype.USER.valueOf(), false);
+        return this.manager.batchInitNextnos(size, core_types_1.NextNoBiztype.USER.valueOf(), false);
     }
     getNextno(biztype) {
         return this.manager.getNextno(biztype);

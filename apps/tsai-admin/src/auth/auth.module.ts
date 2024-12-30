@@ -4,11 +4,13 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JWT_YAML_CONF_KEY } from './auth.constants';
-import { RouterModule } from '@nestjs/core';
+import { APP_GUARD, RouterModule } from '@nestjs/core';
 import { CaptchaController } from './controllers/captcha.controller';
 import { CaptchaService } from '@tsai-platform/core';
 import { AuthHelper } from './services/auth.helper';
 import { AuthService } from './services/auth.service';
+import { AuthJwtGuard } from './guards/auth.jwt.guard';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Global()
 @Module({
@@ -30,15 +32,26 @@ import { AuthService } from './services/auth.service';
         signOptions: {
           issuer: config.get<string>(`${JWT_YAML_CONF_KEY}.iss`, 'tsailab'),
           subject: config.get<string>(`${JWT_YAML_CONF_KEY}.sub`, 'ts-admin'),
-          audience: config.get<string>(`${JWT_YAML_CONF_KEY}.sub`, 'admin-ui'),
-          ignoreExpiration: true, // use redis managment expires
+          // audience: config.get<string>(`${JWT_YAML_CONF_KEY}.sub`, 'admin-ui'),
+        },
+        verifyOptions: {
+          ignoreExpiration: true, // use redis manage token expire
         },
       }),
       inject: [ConfigService],
     }),
   ],
   controllers: [AuthController, CaptchaController],
-  providers: [AuthHelper, CaptchaService, AuthService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthJwtGuard,
+    },
+    JwtStrategy,
+    AuthHelper,
+    CaptchaService,
+    AuthService,
+  ],
   exports: [],
 })
 export class AuthModule {}

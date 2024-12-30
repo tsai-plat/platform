@@ -4,7 +4,7 @@ import { Reflector } from '@nestjs/core';
 import { AuthGuard, IAuthGuard } from '@nestjs/passport';
 import { PublicApiPropertyName } from '@tsai-platform/core';
 import { Observable } from 'rxjs';
-
+import { Request } from 'express';
 /**
  * @see nestjs-passport
  *  register(options)
@@ -43,7 +43,7 @@ export class AuthJwtGuard extends AuthGuard('jwt') implements IAuthGuard {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    if (this.config.get<string>('STAGE', 'prod') === 'dev') return true;
+    // if (this.config.get<string>('STAGE', 'prod') === 'dev') return true;
     // release public routes
     const isPublic = this.reflector.getAllAndOverride(PublicApiPropertyName, [
       context.getHandler(),
@@ -51,6 +51,16 @@ export class AuthJwtGuard extends AuthGuard('jwt') implements IAuthGuard {
     ]);
     if (isPublic) return true;
 
+    // const token = this.extractTokenFromHeader(
+    //   context.switchToHttp().getRequest(),
+    // );
+    // this.logger.log('>>>>>Jwt token>>>>>>', token);
+
     return super.canActivate(context);
+  }
+
+  private extractTokenFromHeader(req: Request) {
+    const [type, token] = req.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }

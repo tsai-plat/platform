@@ -14,16 +14,34 @@ exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const auth_constants_1 = require("../auth.constants");
 const auth_helper_1 = require("./auth.helper");
+const common_2 = require("@tsailab/common");
+const system_1 = require("@tsailab/system");
 let AuthService = AuthService_1 = class AuthService {
-    constructor(authHelper) {
+    constructor(authHelper, sysUserService) {
         this.authHelper = authHelper;
+        this.sysUserService = sysUserService;
         this.logger = new common_1.Logger(`${auth_constants_1.ROOT_APP_NAME}-${AuthService_1.name}`);
     }
-    login(dto) { }
+    async login(dto) {
+        const { account, password, cookieValue } = dto;
+        const sysUser = await this.sysUserService.findUserByAccount(account);
+        if (!sysUser)
+            throw common_2.BizException.createError(common_2.ErrorCodeEnum.UNAUTHORIZED, `用户不存在`);
+        if (!(await this.authHelper.comparePassword(password, sysUser.password))) {
+            throw common_2.BizException.createError(common_2.ErrorCodeEnum.UNAUTHORIZED, `密码错误`);
+        }
+        const user = system_1.SysUserService.convertToUser(sysUser);
+        const token = await this.authHelper.createAccessToken(user, cookieValue);
+        return {
+            token,
+            userinfo: user,
+        };
+    }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = AuthService_1 = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [auth_helper_1.AuthHelper])
+    __metadata("design:paramtypes", [auth_helper_1.AuthHelper,
+        system_1.SysUserService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

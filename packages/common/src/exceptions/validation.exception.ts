@@ -5,8 +5,8 @@ import {
   ValidationError,
 } from '@nestjs/common';
 import { iterate } from 'iterare';
-import { APIResponse } from '../types';
 import { ErrorCodeEnum } from './error.code.enum';
+import { APIResponse } from '@tsailab/core-types';
 
 export class ValidationException extends HttpException {
   constructor(validErrors: ValidationError[], options?: HttpExceptionOptions) {

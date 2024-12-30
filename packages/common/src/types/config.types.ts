@@ -85,7 +85,7 @@ export type CookieConfigSchema = {
   secret?: string;
   httpOnly?: boolean;
   secure?: boolean;
-  maxAge: string | number;
+  maxAge: number;
   path?: string;
   sameSite?: 'strict' | 'lax' | 'none';
   [k: string]: any;

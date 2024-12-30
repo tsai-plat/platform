@@ -8,14 +8,11 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiOperation } from '@nestjs/swagger';
-import { CaptchaService } from '@tsai-platform/core';
-import {
-  CookieConfigSchema,
-  HttpContentTypeEnum,
-  RandomHelper,
-} from '@tsailab/common';
+import { CaptchaService, PublicApi } from '@tsai-platform/core';
+import { CookieConfigSchema, RandomHelper } from '@tsailab/common';
 import { CookieOptions, Response } from 'express';
 import { CaptchaCodeCookieKey, defaultCookieOpts } from '../auth.constants';
+import { HttpContentTypeEnum } from '@tsailab/core-types';
 
 @Controller('captcha')
 export class CaptchaController {
@@ -25,6 +22,7 @@ export class CaptchaController {
     private readonly config: ConfigService,
   ) {}
 
+  @PublicApi()
   @ApiOperation({
     summary: '获取验证图片',
   })

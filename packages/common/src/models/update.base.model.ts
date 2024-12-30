@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntityPropsType } from '../orm';
 import { IsEnum, IsNumber } from 'class-validator';
-import { StatusEnum } from '../enums';
+import { StatusEnum, UserStatusEnum } from '@tsailab/core-types';
 
 export class BaseModel implements Partial<BaseEntityPropsType> {
   orgno: string;
@@ -30,4 +30,14 @@ export class UpdateStatusModel {
   @ApiProperty({ description: 'status' })
   @IsEnum(StatusEnum, { message: 'status required 0 or 1' })
   status: StatusEnum;
+}
+
+export class UpdateUserStatusModel {
+  @ApiProperty({ description: 'unique id' })
+  @IsNumber()
+  id: number;
+
+  @ApiProperty({ description: 'status' })
+  @IsEnum(UserStatusEnum, { message: 'status required 0 or 1' })
+  status: UserStatusEnum;
 }

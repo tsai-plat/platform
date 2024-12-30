@@ -5,10 +5,7 @@ import { Repository } from 'typeorm';
 import {
   BizException,
   ErrorCodeEnum,
-  PageEnum,
   QueryOptionsDto,
-  SelectorOptionsType,
-  StatusEnum,
   UpdateSortnoModel,
   UpdateStatusModel,
 } from '@tsailab/common';
@@ -20,6 +17,7 @@ import {
   SysDictItemModel,
   SysDictModel,
 } from '../models';
+import { PageEnum, SelectorOptionsType, StatusEnum } from '@tsailab/core-types';
 
 @Injectable()
 export class DictService {
@@ -237,7 +235,7 @@ export class DictService {
       .where({ id: id })
       .execute();
 
-    return affected;
+    return affected > 0;
   }
 
   async setDictItemDefaultActived(dto: DictItemDefaultActivedModel) {

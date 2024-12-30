@@ -24,8 +24,6 @@ let AuthJwtGuard = AuthJwtGuard_1 = class AuthJwtGuard extends (0, passport_1.Au
         this.logger = new common_1.Logger(AuthJwtGuard_1.name);
     }
     canActivate(context) {
-        if (this.config.get('STAGE', 'prod') === 'dev')
-            return true;
         const isPublic = this.reflector.getAllAndOverride(core_2.PublicApiPropertyName, [
             context.getHandler(),
             context.getClass(),
@@ -33,6 +31,10 @@ let AuthJwtGuard = AuthJwtGuard_1 = class AuthJwtGuard extends (0, passport_1.Au
         if (isPublic)
             return true;
         return super.canActivate(context);
+    }
+    extractTokenFromHeader(req) {
+        const [type, token] = req.headers.authorization?.split(' ') ?? [];
+        return type === 'Bearer' ? token : undefined;
     }
 };
 exports.AuthJwtGuard = AuthJwtGuard;

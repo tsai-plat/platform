@@ -19,25 +19,28 @@ const swagger_1 = require("@nestjs/swagger");
 const dtos_1 = require("../dtos");
 const auth_constants_1 = require("../auth.constants");
 const core_1 = require("@tsai-platform/core");
-const common_2 = require("@tsailab/common");
+const auth_service_1 = require("../services/auth.service");
+const core_types_1 = require("@tsailab/core-types");
 let AuthController = AuthController_1 = class AuthController {
-    constructor(captcha) {
+    constructor(captcha, authService) {
         this.captcha = captcha;
+        this.authService = authService;
         this.logger = new common_1.Logger(AuthController_1.name);
     }
     async login(req, dto) {
+        const cookieValue = req.cookies[auth_constants_1.CaptchaCodeCookieKey];
         if (!dto?.isLock) {
-            const cookieValue = req.cookies[auth_constants_1.CaptchaCodeCookieKey];
-            this.logger.log(`>>cookieValue>>>>${cookieValue}`, dto);
-            await this.captcha.validateCaptchaValue(dto?.code ?? '', cookieValue, common_2.PlatformEnum.SYSTEM_PLATFORM);
+            await this.captcha.validateCaptchaValue(dto?.code ?? '', cookieValue, core_types_1.PlatformEnum.SYSTEM_PLATFORM);
         }
-        return {
-            ...dto,
-        };
+        return await this.authService.login({ ...dto, cookieValue });
+    }
+    async getUserInfo(user) {
+        return user;
     }
 };
 exports.AuthController = AuthController;
 __decorate([
+    (0, core_1.PublicApi)(),
     (0, swagger_1.ApiOperation)({
         summary: '用戶名+密码登录',
         description: '用戶名+密码登录',
@@ -49,9 +52,17 @@ __decorate([
     __metadata("design:paramtypes", [Object, dtos_1.SigninLocalDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
+__decorate([
+    (0, common_1.Get)('userinfo'),
+    __param(0, (0, core_1.CurrentUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "getUserInfo", null);
 exports.AuthController = AuthController = AuthController_1 = __decorate([
     (0, swagger_1.ApiTags)('System Auth 模块'),
     (0, common_1.Controller)(),
-    __metadata("design:paramtypes", [core_1.CaptchaService])
+    __metadata("design:paramtypes", [core_1.CaptchaService,
+        auth_service_1.AuthService])
 ], AuthController);
 //# sourceMappingURL=auth.controller.js.map

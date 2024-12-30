@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { QueryPageParams } from '@tsailab/core-types';
 import { Transform, TransformFnParams } from 'class-transformer';
 import { IsOptional } from 'class-validator';
-import { QueryPageParams } from '../types';
 
 export class QueryOptionsDto implements QueryPageParams {
   @ApiPropertyOptional({

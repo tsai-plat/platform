@@ -10,7 +10,7 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { TsaiAdminModuleRoutes } from 'src/api/api.routes';
 import { NextNoManager } from '../services';
-import { NextNoBiztype } from '@tsailab/common';
+import { NextNoBiztype } from '@tsailab/core-types';
 
 @ApiTags(`${TsaiAdminModuleRoutes.systemRoute.desc}: 系统管理员`)
 @Controller('nextno')

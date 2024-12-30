@@ -1,17 +1,18 @@
 import { SysUserManager } from '../services';
-import { QueryAdminUserReqDto } from '../dtos';
+import { QueryAdminUserReqDto, ResetSysUserPwdDto } from '../dtos';
 import { CreateSUserModel } from '@tsailab/system/dist/models/suser.model';
+import { UpdateUserStatusModel } from '@tsailab/common';
+import { IUser } from '@tsailab/core-types';
 export declare class SuserController {
     private readonly sysManager;
     constructor(sysManager: SysUserManager);
     list(queryDto: QueryAdminUserReqDto): Promise<{
-        filterDeleted: boolean;
-        r: import("@tsai-platform/ucenter/dist/entities").UserEntity;
-        username?: string;
-        mobile?: string;
-        pageSize?: number;
-        page?: number;
-        keywords?: string;
+        page: number;
+        pageSize: number;
+        total: number;
+        list: import("@tsailab/system").SystemUserEntity[];
     }>;
     addSystemUser(user: CreateSUserModel): Promise<import("@tsailab/system").SystemUserEntity>;
+    resetOtherPassword(dto: ResetSysUserPwdDto, user: IUser): Promise<boolean>;
+    updateStatus(dto: UpdateUserStatusModel, user: IUser): Promise<import("typeorm").UpdateResult>;
 }

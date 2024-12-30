@@ -18,6 +18,8 @@ const captcha_controller_1 = require("./controllers/captcha.controller");
 const core_2 = require("@tsai-platform/core");
 const auth_helper_1 = require("./services/auth.helper");
 const auth_service_1 = require("./services/auth.service");
+const auth_jwt_guard_1 = require("./guards/auth.jwt.guard");
+const jwt_strategy_1 = require("./strategies/jwt.strategy");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -42,7 +44,8 @@ exports.AuthModule = AuthModule = __decorate([
                     signOptions: {
                         issuer: config.get(`${auth_constants_1.JWT_YAML_CONF_KEY}.iss`, 'tsailab'),
                         subject: config.get(`${auth_constants_1.JWT_YAML_CONF_KEY}.sub`, 'ts-admin'),
-                        audience: config.get(`${auth_constants_1.JWT_YAML_CONF_KEY}.sub`, 'admin-ui'),
+                    },
+                    verifyOptions: {
                         ignoreExpiration: true,
                     },
                 }),
@@ -50,7 +53,16 @@ exports.AuthModule = AuthModule = __decorate([
             }),
         ],
         controllers: [auth_controller_1.AuthController, captcha_controller_1.CaptchaController],
-        providers: [auth_helper_1.AuthHelper, core_2.CaptchaService, auth_service_1.AuthService],
+        providers: [
+            {
+                provide: core_1.APP_GUARD,
+                useClass: auth_jwt_guard_1.AuthJwtGuard,
+            },
+            jwt_strategy_1.JwtStrategy,
+            auth_helper_1.AuthHelper,
+            core_2.CaptchaService,
+            auth_service_1.AuthService,
+        ],
         exports: [],
     })
 ], AuthModule);

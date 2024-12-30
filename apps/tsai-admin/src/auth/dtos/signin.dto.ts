@@ -23,7 +23,7 @@ export class SigninLocalDto {
     required: true,
     description: `验证码`,
   })
-  @ValidateIf((o) => !!o.isLock && !o?.code?.trim()?.length, {
+  @ValidateIf((o) => !o.isLock && !o?.code?.trim()?.length, {
     message: '请输入验证码',
   })
   code?: string;

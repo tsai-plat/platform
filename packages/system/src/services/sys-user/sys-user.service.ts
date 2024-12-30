@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { SystemUserEntity } from '../../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateSUserModel } from '../../models/suser.model';
@@ -10,13 +10,16 @@ import {
   ErrorCodeEnum,
   is86Phone,
   isEmail,
-  NextNoBiztype,
-  PlatformEnum,
   RandomHelper,
-  UserStatusEnum,
 } from '@tsailab/common';
 import { NextNoService } from '../next-no/next-no.service';
 import { SystemConfigService } from '../system.config.service';
+import {
+  IUser,
+  NextNoBiztype,
+  PlatformEnum,
+  UserStatusEnum,
+} from '@tsailab/core-types';
 
 @Injectable()
 export class SysUserService {
@@ -37,6 +40,27 @@ export class SysUserService {
 
   getByUno(uno: string): Promise<SystemUserEntity | null> {
     return this.accountReository.findOneBy({ userno: uno });
+  }
+
+  async findUserByAccount(account: string): Promise<SystemUserEntity | null> {
+    const qb = this.accountReository.createQueryBuilder('suser');
+    const user = await qb
+      .where(
+        'suser.phone = :account OR suser.email = :account OR suser.userno = :no OR suser.username = :account',
+        { account, no: account },
+      )
+      .getOne();
+
+    if (user) {
+      const { password } = await qb
+        .select('suser.password', 'password')
+        .where('suser.id = :id', { id: user.id })
+        .getRawOne();
+
+      user.password = password;
+    }
+
+    return user;
   }
 
   /**
@@ -135,6 +159,23 @@ export class SysUserService {
     return entity;
   }
 
+  /**
+   *
+   * @param id
+   * @param password user input password
+   * @returns UpdateResult
+   */
+  async resetPassword(id: number, password: string): Promise<UpdateResult> {
+    const encryptedPassword = await this.encryptPassword(password);
+    return await this.accountReository.update(id, {
+      password: encryptedPassword,
+    });
+  }
+
+  setUserStatus(id: number, status: UserStatusEnum) {
+    return this.accountReository.update(id, { status: status });
+  }
+
   validCreateSUserModel(model: CreateSUserModel) {
     const { phone, email } = model;
     if (!phone?.length && !email?.length)
@@ -148,5 +189,52 @@ export class SysUserService {
     if (email?.length && !isEmail(email)) {
       throw BizException.ParameterInvalidError(`The email [${email}] invalid.`);
     }
+  }
+
+  encryptPassword(password: string) {
+    return BcryptHelper.encryptPassword(
+      password,
+      this.sysConfService.encrptRounds,
+    );
+  }
+
+  static convertToUser(entity: SystemUserEntity) {
+    const {
+      id,
+      userno,
+      username,
+      email,
+      phone,
+      platform,
+      status,
+      acctype,
+      openid,
+      orgno,
+      avatar,
+      nickname,
+      unionid,
+      remark,
+      isSuper,
+    } = entity;
+
+    const user: IUser = {
+      id,
+      orgno,
+      userno,
+      username,
+      email,
+      phone,
+      acctype,
+      status,
+      platform,
+      openid,
+      avatar,
+      nickname,
+      unionid,
+      remark,
+      isSuper,
+    };
+
+    return user;
   }
 }

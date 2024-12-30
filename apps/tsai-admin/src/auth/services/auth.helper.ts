@@ -1,28 +1,31 @@
 import { ConfigService } from '@nestjs/config';
 import { defaultJwtOpts, JWT_YAML_CONF_KEY } from '../auth.constants';
 import {
-  AccountType,
+  BcryptHelper,
   BizException,
   CacheKeyHelper,
   convertDurationVolumeToSeconds,
   ErrorCodeEnum,
-  IUser,
-  JwtAccessPayload,
   JwtConfigSchmeaOptions,
   RandomHelper,
-  TokenUserCache,
   UuidGenerator,
 } from '@tsailab/common';
 import { RedisService } from '@tsailab/ioredis-mq';
 import { JwtService } from '@nestjs/jwt';
-import { Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+import { Injectable, Logger } from '@nestjs/common';
+import {
+  AccountType,
+  IUser,
+  JwtAccessPayload,
+  TokenUserCache,
+} from '@tsailab/core-types';
 
 /**
  * AuthHelper
  */
 @Injectable()
 export class AuthHelper {
+  protected logger = new Logger(AuthHelper.name);
   private readonly jwtOptions: JwtConfigSchmeaOptions;
   constructor(
     private readonly config: ConfigService,
@@ -108,36 +111,46 @@ export class AuthHelper {
   }
 
   /**
+   *
    * 加密用户密码
    * @param password
    * @returns string
    */
   async encryptPassword(password: string): Promise<string> {
-    const salt = await bcrypt.genSalt(this.encrptRounds);
-    const enpw = await bcrypt.hash(password, salt);
-    return enpw;
+    return BcryptHelper.encryptPassword(password);
+  }
+
+  /**
+   *
+   * @param password string
+   * @param encrypted 's0/\/\P4$$w0rD'
+   * @returns boolean
+   */
+  async comparePassword(
+    password: string = '',
+    encrypted: string = '',
+  ): Promise<boolean> {
+    return await BcryptHelper.validPassword(password, encrypted);
   }
 
   private async buildAccessPayload(user: IUser, state?: string) {
     const { id, username, userno, acctype, avatar } = user;
-    const { version, iss, sub } = this.jwtOptions;
+    const { version } = this.jwtOptions;
 
-    const now = new Date();
+    // const now = new Date();
     const jti = await UuidGenerator.createJti();
 
     const payload: JwtAccessPayload = {
-      jti,
       version,
+      jti,
       id,
+      aud: acctype,
       username,
       cid: userno,
-      iss,
-      sub,
       acctype,
       avatar,
-      iat: now.valueOf(),
+      nonce: state ?? RandomHelper.randomState(),
     };
-    if (state?.length) payload.nonce = state;
 
     return payload;
   }
@@ -153,7 +166,7 @@ export class AuthHelper {
     return CacheKeyHelper.buildAccessTokenKey(id, clit, acctype);
   }
 
-  private async decryptToken(token: string): Promise<JwtAccessPayload> {
+  async decryptToken(token: string): Promise<JwtAccessPayload> {
     return await this.jwt.decode<JwtAccessPayload>(token);
   }
 

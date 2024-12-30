@@ -22,7 +22,9 @@ import { REDIS_IO_CLIENTS, REDIS_MERGED_OPTIONS } from './redis.constants';
 import { isError, parseNamespace } from './utils';
 import { ERROR_LOG, redisLogger } from './log';
 
-@Module({})
+@Module({
+  providers: [],
+})
 export class CacheRedisModule implements OnApplicationShutdown {
   constructor(private moduleRef: ModuleRef) {}
 

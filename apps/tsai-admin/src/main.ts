@@ -1,10 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import {
-  convertYes,
-  CookieConfigSchema,
-  LotoAppListener,
-} from '@tsailab/common/';
+import { CookieConfigSchema, LotoAppListener } from '@tsailab/common/';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -19,6 +15,7 @@ import {
 } from '@tsai-platform/core';
 import { defaultCookieOpts } from './auth/auth.constants';
 import { sslOptionsLoad } from './runtimes';
+import { convertYes } from '@tsailab/core-types';
 
 /**
  * Tsailab Application bootstrap
@@ -50,6 +47,15 @@ async function bootstrap() {
   // Web漏洞的
   app.use(helmet());
 
+  await app.setGlobalPrefix(apiPrefix, {
+    exclude: [
+      {
+        path: 'health',
+        method: RequestMethod.GET,
+      },
+    ],
+  });
+
   //
   if (convertYes(swaggerEnabled)) {
     const docDesc = configService.get<string>('swagger.docDesc', description);
@@ -59,9 +65,10 @@ async function bootstrap() {
     );
 
     const options = new DocumentBuilder()
+      .setBasePath(`/${apiPrefix}/`)
       .setTitle(docTitle)
       .setDescription(docDesc)
-      .addBearerAuth({ type: 'apiKey', in: 'header', name: 'token' })
+      .addBearerAuth()
       .addTag(`api-${apiPrefix}`)
       .setVersion(version ?? '1.0.0')
       .setContact(author ?? 'tsai', wikiUrl, 'lamborcai@gmail.com')
@@ -70,15 +77,6 @@ async function bootstrap() {
     const document = await SwaggerModule.createDocument(app, options);
     await SwaggerModule.setup(`docs-${apiPrefix}`, app, document);
   }
-
-  await app.setGlobalPrefix(apiPrefix, {
-    exclude: [
-      {
-        path: 'health',
-        method: RequestMethod.GET,
-      },
-    ],
-  });
 
   // cookie
   const { secret } = await configService.get<CookieConfigSchema>(

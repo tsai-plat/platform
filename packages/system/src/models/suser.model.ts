@@ -1,4 +1,4 @@
-import { PlatformEnum } from '@tsailab/common';
+import { PlatformEnum } from '@tsailab/core-types';
 
 export class CreateSUserModel {
   phone: string; // uni

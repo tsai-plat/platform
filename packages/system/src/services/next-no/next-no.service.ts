@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NextNoEntity } from '../../entities';
 import { Repository } from 'typeorm';
-import { BizException, NextNoBiztype } from '@tsailab/common';
+import { BizException } from '@tsailab/common';
+import { NextNoBiztype } from '@tsailab/core-types';
 
 @Injectable()
 export class NextNoService {

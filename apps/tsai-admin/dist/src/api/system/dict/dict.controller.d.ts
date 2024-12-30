@@ -20,7 +20,7 @@ export declare class DictController {
         icon: string;
         remark: string;
         sortno: number;
-        status: import("@tsailab/common").StatusEnum;
+        status: import("@tsailab/core-types").StatusEnum;
         items: Array<import("@tsailab/system").SysDictItemEntity>;
         orgno: string;
         createdBy?: number;
@@ -46,7 +46,7 @@ export declare class DictController {
         icon: string;
         remark: string;
         sortno: number;
-        status: import("@tsailab/common").StatusEnum;
+        status: import("@tsailab/core-types").StatusEnum;
         defaultActived: boolean;
         orgno: string;
         createdBy?: number;
@@ -55,8 +55,8 @@ export declare class DictController {
         updatedAt: Date;
         deletedAt?: Date;
     }>;
-    setItemSortnoById(dto: UpdateSortnoModel): Promise<number>;
+    setItemSortnoById(dto: UpdateSortnoModel): Promise<boolean>;
     setDictItemStatus(dto: UpdateStatusModel): Promise<boolean>;
     setDictItemActivedStatus(dto: DictItemDefaultActivedModel): Promise<boolean>;
-    getDictItemSelections(dictCode: string): Promise<import("@tsailab/common").SelectorOptionsType<string>[]>;
+    getDictItemSelections(dictCode: string): Promise<import("@tsailab/core-types").SelectorOptionsType<string>[]>;
 }
