@@ -73,6 +73,27 @@ export class RoleService {
     return affected > 0;
   }
 
+  async setRoleGroup(
+    id: number,
+    group: string = '',
+  ): Promise<RoleEntity | never> {
+    const find = await this.getById(id);
+    if (!find) {
+      throw BizException.createError(
+        ErrorCodeEnum.DATA_RECORD_REMOVED,
+        `角色已删除`,
+      );
+    }
+    const { affected } = await this.repository
+      .createQueryBuilder('role')
+      .update(RoleEntity)
+      .set({ group })
+      .where({ id })
+      .execute();
+
+    return affected > 0 ? ({ ...find, group } as RoleEntity) : find;
+  }
+
   async setDefault(id: number) {
     const find = await this.getById(id);
     if (!find)
@@ -81,7 +102,7 @@ export class RoleService {
     const { affected: canceled } = await qb
       .update(RoleEntity)
       .set({ isDefault: false })
-      .where('id != :id', { id })
+      .where('id != :id AND group = :group', { id, group: find.group })
       .execute();
 
     const { affected } = await qb
@@ -95,7 +116,7 @@ export class RoleService {
 
   async addRole(model: CreateRoleModel): Promise<RoleEntity | never> {
     const { name } = model;
-    if (name?.length)
+    if (!name?.length)
       throw BizException.IllegalParamterError(`Role name required.`);
     const qb = this.roleRepository.createQueryBuilder('role');
 

@@ -48,11 +48,24 @@ export class UpdateOrganizationModel
   implements
     Pick<
       OrganizationEntity,
-      'id' | 'name' | 'code' | 'shortName' | 'icon' | 'description' | 'pid'
+      | 'id'
+      | 'pid'
+      | 'name'
+      | 'shortName'
+      | 'icon'
+      | 'contact'
+      | 'email'
+      | 'phone'
+      | 'status'
+      | 'description'
     >
 {
-  pid?: number;
   id: number;
+  pid?: number;
+  contact?: string;
+  email?: string;
+  phone?: string;
+  status: StatusEnum;
   name: string;
   code?: string;
   shortName?: string;

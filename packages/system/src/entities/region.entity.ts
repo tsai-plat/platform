@@ -1,4 +1,4 @@
-import { CommonEntity } from '@tsailab/common';
+import { BaseEntity } from '@tsailab/common';
 import { StatusEnum } from '@tsailab/core-types';
 import { Transform, Type } from 'class-transformer';
 import { Column, Entity } from 'typeorm';
@@ -7,7 +7,7 @@ import { Column, Entity } from 'typeorm';
   name: 'sys_region',
   synchronize: false,
 })
-export class SystemRegionEntity extends CommonEntity {
+export class SystemRegionEntity extends BaseEntity {
   @Column({
     type: 'bigint',
     name: 'pid',

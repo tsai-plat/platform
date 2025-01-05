@@ -27,8 +27,8 @@ importers:
         specifier: ^10.0.2
         version: 10.0.2(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13)(reflect-metadata@0.2.2)(rxjs@7.8.1)(typeorm@0.3.20(ioredis@5.4.1)(mysql2@3.11.5)(redis@4.7.0)(ts-node@10.9.2(@types/node@22.10.1)(typescript@5.7.2)))
       '@tsailab/core-types':
-        specifier: 0.0.5
-        version: 0.0.5
+        specifier: 0.0.9
+        version: 0.0.9
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -1026,8 +1026,8 @@ packages:
   '@sqltools/formatter@1.2.5':
     resolution: {integrity: sha512-Uy0+khmZqUrUGm5dmMqVlnvufZRSK0FbYzVgp0UMstm+F5+W2/jnEEQyc9vo1ZR/E5ZI/B1WjjoTqBqwJL6Krw==}
 
-  '@tsailab/core-types@0.0.5':
-    resolution: {integrity: sha512-laMO3g1IMhkesh0vO1072J+g4kc2vx6fa3q4kNqlAV7DLe9prt3Wi7i/1IqRwUxQgrvErOw6/6DOwoZSF6h+xA==}
+  '@tsailab/core-types@0.0.9':
+    resolution: {integrity: sha512-Qtgd6H93Jj+M4/A2e3S0aX4NXjbGOWwEuqj5M/LKoEQpJRlvhwFgA+AYTWzOT1DEa25fEG+yEd65VpoXK8JyMg==}
 
   '@tsailab/ioredis-mq@0.0.4':
     resolution: {integrity: sha512-wvu1u0KmoeibY9cTVVvxynkRYOq9ciF9lraUiwzVJsj6Be0E1hkC0ZAzC9QLs2eVVkUhdbqD+ZP988Z9IT4KQQ==}
@@ -4453,7 +4453,7 @@ snapshots:
 
   '@sqltools/formatter@1.2.5': {}
 
-  '@tsailab/core-types@0.0.5': {}
+  '@tsailab/core-types@0.0.9': {}
 
   '@tsailab/ioredis-mq@0.0.4(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13)(@nestjs/platform-express@10.4.13)(chalk@4.1.2)(eslint@8.57.1)(ioredis@5.4.1)(js-yaml@4.1.0)(reflect-metadata@0.2.2)(rxjs@7.8.1)':
     dependencies:

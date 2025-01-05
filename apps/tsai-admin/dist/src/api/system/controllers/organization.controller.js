@@ -53,6 +53,12 @@ let OrganizationController = class OrganizationController {
     getSelectionNodes(pid) {
         return this.organizationService.getSelectionTreeNodesByPid(pid ?? -1);
     }
+    getCascadeNodes(pid) {
+        return this.organizationService.getCommonTreeNodes(pid);
+    }
+    getNextOrgno(pid = core_types_1.ROOT_TRRE_NODE_PID) {
+        return this.organizationService.getNextOrgnoByPid(pid);
+    }
 };
 exports.OrganizationController = OrganizationController;
 __decorate([
@@ -124,6 +130,28 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], OrganizationController.prototype, "getSelectionNodes", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({
+        summary: '组织机构级联选择树',
+        description: '查询All组织树 TreeNodeOptionType',
+    }),
+    (0, common_1.Get)('cascade_tree_nodes/:pid'),
+    __param(0, (0, common_1.Param)('pid')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], OrganizationController.prototype, "getCascadeNodes", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({
+        summary: '获取当前父节点下的next orgno',
+        description: '获取当前父节点下的next orgno',
+    }),
+    (0, common_1.Get)('next_orgno/:pid'),
+    __param(0, (0, common_1.Param)('pid')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], OrganizationController.prototype, "getNextOrgno", null);
 exports.OrganizationController = OrganizationController = __decorate([
     (0, swagger_1.ApiTags)(`${api_routes_1.TsaiAdminModuleRoutes.systemRoute.desc} - Organization`),
     (0, common_1.Controller)('organization'),

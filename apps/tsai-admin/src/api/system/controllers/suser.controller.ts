@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { TsaiAdminModuleRoutes } from 'src/api/api.routes';
 import { SysUserManager } from '../services';
 import { QueryAdminUserReqDto, ResetSysUserPwdDto } from '../dtos';
-import { CreateSUserModel } from '@tsailab/system/dist/models/suser.model';
+
 import { CurrentUser } from '@tsai-platform/core';
 import {
   BizException,
@@ -11,6 +11,7 @@ import {
   UpdateUserStatusModel,
 } from '@tsailab/common';
 import { IUser } from '@tsailab/core-types';
+import { CreateSUserModel, UpdateSUserModel } from '@tsailab/system';
 
 @ApiTags(`${TsaiAdminModuleRoutes.systemRoute.desc}: 系统管理员`)
 @Controller('suser')
@@ -27,6 +28,12 @@ export class SuserController {
   @Post('create')
   addSystemUser(@Body() user: CreateSUserModel) {
     return this.sysManager.createSystemUser(user);
+  }
+
+  @ApiOperation({ summary: '修改用户' })
+  @Post('update_some')
+  updateSystemUser(@Body() dto: UpdateSUserModel) {
+    return this.sysManager.updateSystemUserSome(dto);
   }
 
   @ApiOperation({ summary: '重置密码' })
@@ -47,6 +54,37 @@ export class SuserController {
         '不能修改自己的状态',
       );
     }
+    if (!user?.isSuper) {
+      throw BizException.createError(
+        ErrorCodeEnum.USER_NO_PERMISSION,
+        `只有超级管理员才能操作.`,
+      );
+    }
     return this.sysManager.updateSystemUserStatus(dto);
+  }
+
+  @ApiOperation({ summary: '设为超级管理员' })
+  @Post('set_issuper/:id')
+  setIsSuper(@Param('id') id: number, @CurrentUser() user: IUser) {
+    if (!user?.isSuper) {
+      throw BizException.createError(
+        ErrorCodeEnum.USER_NO_PERMISSION,
+        `只有超级管理员才能操作.`,
+      );
+    }
+    return this.sysManager.setUserIsSuper(id, true);
+  }
+
+  @ApiOperation({ summary: '取消超级管理员' })
+  @Post('cancel_issuper/:id')
+  cancelIsSuper(@Param('id') id: number, @CurrentUser() user: IUser) {
+    if (!user?.isSuper) {
+      throw BizException.createError(
+        ErrorCodeEnum.USER_NO_PERMISSION,
+        `只有超级管理员才能操作.`,
+      );
+    }
+
+    return this.sysManager.setUserIsSuper(id, false);
   }
 }

@@ -28,5 +28,5 @@ export function isMiddelPassword(password: string): boolean {
  * @returns boolean
  */
 export function isSimplePassword(password: string): boolean {
-  return /^(?=.*[a-zA-Z])[A-Za-z\d@$!%*?&]{6,}$/.test(password);
+  return /^(?=.*[a-zA-Z0-9])[A-Za-z\d@$!%*?&]{6,}$/.test(password);
 }

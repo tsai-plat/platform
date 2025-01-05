@@ -21,6 +21,15 @@ export class RoleEntity extends BaseEntity {
     type: 'varchar',
     nullable: true,
     length: 100,
+    name: 'group',
+    comment: 'Role group',
+  })
+  group: string;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
+    length: 100,
     name: 'description',
     comment: 'Role Description',
   })

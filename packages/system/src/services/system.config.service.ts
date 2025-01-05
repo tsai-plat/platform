@@ -13,6 +13,7 @@ export class SystemConfigService {
   private readonly seedsKey = 'system.unoSeeds';
   protected seeds: string[] = [];
   private pwdSecurityLevel: string = 'simple';
+  public readonly suserDefaultPw: string;
   public readonly encrptRounds: number;
   constructor(private readonly config: ConfigService) {
     const conf = config.get('system.unoSeeds', null);
@@ -30,6 +31,10 @@ export class SystemConfigService {
     );
 
     this.encrptRounds = this.config.get<number>('system.encrptRounds', 10);
+    this.suserDefaultPw = this.config.get<string>(
+      'system.defaultPassword',
+      'tsai!123456',
+    );
   }
 
   public getUnoSeeds() {

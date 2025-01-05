@@ -1,7 +1,14 @@
-import { SystemConfigService, SysUserService } from '@tsailab/system';
+import {
+  SystemConfigService,
+  SystemUserEntity,
+  SysUserService,
+} from '@tsailab/system';
 import { QueryAdminUserReqDto, ResetSysUserPwdDto } from '../dtos';
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateSUserModel } from '@tsailab/system/dist/models/suser.model';
+import {
+  CreateSUserModel,
+  UpdateSUserModel,
+} from '@tsailab/system/dist/models/suser.model';
 import { ConfigService } from '@nestjs/config';
 import {
   BizException,
@@ -64,9 +71,10 @@ export class SysUserManager {
     };
   }
 
-  updateSystemUserStatus(dto: UpdateUserStatusModel) {
+  async updateSystemUserStatus(dto: UpdateUserStatusModel) {
     const { id, status } = dto;
-    return this.sysUserService.setUserStatus(id, status);
+    const { affected } = await this.sysUserService.setUserStatus(id, status);
+    return affected > 0;
   }
 
   async resetSystemUserPassword(dto: ResetSysUserPwdDto, user: IUser) {
@@ -83,6 +91,26 @@ export class SysUserManager {
       );
     }
     const { id, password } = dto;
+    await this.sysConfigService.verifyPasswordStrength(password);
+    const { affected } = await this.sysUserService.resetPassword(id, password);
+    return affected > 0;
+  }
+
+  async resetSystemUserPasswordByDefault(id: number, user: IUser) {
+    if (!user?.id || !user.isSuper) {
+      throw BizException.createError(
+        ErrorCodeEnum.USER_NO_PERMISSION,
+        '您无权重置密码,请联系超级管理员!',
+      );
+    }
+    if (id === user.id) {
+      throw BizException.createError(
+        ErrorCodeEnum.USER_NO_PERMISSION,
+        '不能重置自己的密码',
+      );
+    }
+
+    const password = await this.sysConfigService.suserDefaultPw;
     const { affected } = await this.sysUserService.resetPassword(id, password);
     return affected > 0;
   }
@@ -97,5 +125,26 @@ export class SysUserManager {
       dto.password = pw;
     }
     return await this.sysUserService.createSuser(dto);
+  }
+
+  async setUserIsSuper(id: number, isSuper: boolean = false) {
+    const find = await this.sysUserService.getById(id);
+    if (!find)
+      throw BizException.createError(
+        ErrorCodeEnum.DATA_RECORD_REMOVED,
+        `用户不存在`,
+      );
+    const { affected } = await this.sysUserService.accRepository
+      .createQueryBuilder('user')
+      .update(SystemUserEntity)
+      .set({ isSuper })
+      .where({ id })
+      .execute();
+
+    return affected > 0;
+  }
+
+  updateSystemUserSome(dto: UpdateSUserModel) {
+    return this.sysUserService.updaetSuser(dto);
   }
 }

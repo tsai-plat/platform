@@ -9,7 +9,11 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BizException, ErrorCodeEnum } from '@tsailab/common';
-import { SetStatusData, SortnoMoveEnum } from '@tsailab/core-types';
+import {
+  ROOT_TRRE_NODE_PID,
+  SetStatusData,
+  SortnoMoveEnum,
+} from '@tsailab/core-types';
 import {
   AddOrganizationModel,
   OrganizationService,
@@ -82,5 +86,23 @@ export class OrganizationController {
   @Get('tree_selections/:pid')
   getSelectionNodes(@Param('pid') pid: number) {
     return this.organizationService.getSelectionTreeNodesByPid(pid ?? -1);
+  }
+
+  @ApiOperation({
+    summary: '组织机构级联选择树',
+    description: '查询All组织树 TreeNodeOptionType',
+  })
+  @Get('cascade_tree_nodes/:pid')
+  getCascadeNodes(@Param('pid') pid: number) {
+    return this.organizationService.getCommonTreeNodes(pid);
+  }
+
+  @ApiOperation({
+    summary: '获取当前父节点下的next orgno',
+    description: '获取当前父节点下的next orgno',
+  })
+  @Get('next_orgno/:pid')
+  getNextOrgno(@Param('pid') pid: number = ROOT_TRRE_NODE_PID) {
+    return this.organizationService.getNextOrgnoByPid(pid);
   }
 }

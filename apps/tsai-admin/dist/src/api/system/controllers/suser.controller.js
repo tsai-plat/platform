@@ -18,9 +18,9 @@ const swagger_1 = require("@nestjs/swagger");
 const api_routes_1 = require("../../api.routes");
 const services_1 = require("../services");
 const dtos_1 = require("../dtos");
-const suser_model_1 = require("@tsailab/system/dist/models/suser.model");
 const core_1 = require("@tsai-platform/core");
 const common_2 = require("@tsailab/common");
+const system_1 = require("@tsailab/system");
 let SuserController = class SuserController {
     constructor(sysManager) {
         this.sysManager = sysManager;
@@ -31,6 +31,9 @@ let SuserController = class SuserController {
     addSystemUser(user) {
         return this.sysManager.createSystemUser(user);
     }
+    updateSystemUser(dto) {
+        return this.sysManager.updateSystemUserSome(dto);
+    }
     resetOtherPassword(dto, user) {
         return this.sysManager.resetSystemUserPassword(dto, user);
     }
@@ -38,7 +41,22 @@ let SuserController = class SuserController {
         if (dto.id === user.id) {
             throw common_2.BizException.createError(common_2.ErrorCodeEnum.USER_NO_PERMISSION, '不能修改自己的状态');
         }
+        if (!user?.isSuper) {
+            throw common_2.BizException.createError(common_2.ErrorCodeEnum.USER_NO_PERMISSION, `只有超级管理员才能操作.`);
+        }
         return this.sysManager.updateSystemUserStatus(dto);
+    }
+    setIsSuper(id, user) {
+        if (!user?.isSuper) {
+            throw common_2.BizException.createError(common_2.ErrorCodeEnum.USER_NO_PERMISSION, `只有超级管理员才能操作.`);
+        }
+        return this.sysManager.setUserIsSuper(id, true);
+    }
+    cancelIsSuper(id, user) {
+        if (!user?.isSuper) {
+            throw common_2.BizException.createError(common_2.ErrorCodeEnum.USER_NO_PERMISSION, `只有超级管理员才能操作.`);
+        }
+        return this.sysManager.setUserIsSuper(id, false);
     }
 };
 exports.SuserController = SuserController;
@@ -55,9 +73,17 @@ __decorate([
     (0, common_1.Post)('create'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [suser_model_1.CreateSUserModel]),
+    __metadata("design:paramtypes", [system_1.CreateSUserModel]),
     __metadata("design:returntype", void 0)
 ], SuserController.prototype, "addSystemUser", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: '修改用户' }),
+    (0, common_1.Post)('update_some'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [system_1.UpdateSUserModel]),
+    __metadata("design:returntype", void 0)
+], SuserController.prototype, "updateSystemUser", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: '重置密码' }),
     (0, common_1.Post)('resetpwd'),
@@ -76,6 +102,24 @@ __decorate([
     __metadata("design:paramtypes", [common_2.UpdateUserStatusModel, Object]),
     __metadata("design:returntype", void 0)
 ], SuserController.prototype, "updateStatus", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: '设为超级管理员' }),
+    (0, common_1.Post)('set_issuper/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, core_1.CurrentUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", void 0)
+], SuserController.prototype, "setIsSuper", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: '取消超级管理员' }),
+    (0, common_1.Post)('cancel_issuper/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, core_1.CurrentUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", void 0)
+], SuserController.prototype, "cancelIsSuper", null);
 exports.SuserController = SuserController = __decorate([
     (0, swagger_1.ApiTags)(`${api_routes_1.TsaiAdminModuleRoutes.systemRoute.desc}: 系统管理员`),
     (0, common_1.Controller)('suser'),

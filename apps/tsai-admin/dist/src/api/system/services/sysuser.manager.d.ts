@@ -1,7 +1,7 @@
-import { SystemConfigService, SysUserService } from '@tsailab/system';
+import { SystemConfigService, SystemUserEntity, SysUserService } from '@tsailab/system';
 import { QueryAdminUserReqDto, ResetSysUserPwdDto } from '../dtos';
 import { Logger } from '@nestjs/common';
-import { CreateSUserModel } from '@tsailab/system/dist/models/suser.model';
+import { CreateSUserModel, UpdateSUserModel } from '@tsailab/system/dist/models/suser.model';
 import { ConfigService } from '@nestjs/config';
 import { UpdateUserStatusModel } from '@tsailab/common';
 import { IUser } from '@tsailab/core-types';
@@ -15,9 +15,12 @@ export declare class SysUserManager {
         page: number;
         pageSize: number;
         total: number;
-        list: import("@tsailab/system").SystemUserEntity[];
+        list: SystemUserEntity[];
     }>;
-    updateSystemUserStatus(dto: UpdateUserStatusModel): Promise<import("typeorm").UpdateResult>;
+    updateSystemUserStatus(dto: UpdateUserStatusModel): Promise<boolean>;
     resetSystemUserPassword(dto: ResetSysUserPwdDto, user: IUser): Promise<boolean>;
-    createSystemUser(dto: CreateSUserModel): Promise<import("@tsailab/system").SystemUserEntity>;
+    resetSystemUserPasswordByDefault(id: number, user: IUser): Promise<boolean>;
+    createSystemUser(dto: CreateSUserModel): Promise<SystemUserEntity>;
+    setUserIsSuper(id: number, isSuper?: boolean): Promise<boolean>;
+    updateSystemUserSome(dto: UpdateSUserModel): Promise<boolean>;
 }

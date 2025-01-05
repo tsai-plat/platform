@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Repository, UpdateResult } from 'typeorm';
+import { Equal, Repository, UpdateResult } from 'typeorm';
 import { SystemUserEntity } from '../../entities';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateSUserModel } from '../../models/suser.model';
+import { CreateSUserModel, UpdateSUserModel } from '../../models/suser.model';
 
 import {
   BcryptHelper,
@@ -10,6 +10,7 @@ import {
   ErrorCodeEnum,
   is86Phone,
   isEmail,
+  mapToObj,
   RandomHelper,
 } from '@tsailab/common';
 import { NextNoService } from '../next-no/next-no.service';
@@ -18,6 +19,7 @@ import {
   IUser,
   NextNoBiztype,
   PlatformEnum,
+  ROOT_TREE_NODE_ID,
   UserStatusEnum,
 } from '@tsailab/core-types';
 
@@ -80,7 +82,7 @@ export class SysUserService {
       email,
       openid,
       username,
-      orgno,
+      orgid = ROOT_TREE_NODE_ID,
       avatar,
       platform = PlatformEnum.SYSTEM_PLATFORM,
       isSuper = false,
@@ -141,7 +143,7 @@ export class SysUserService {
       isSuper,
       platform,
       openid,
-      orgno,
+      orgid,
     };
 
     const entity = await this.accountReository.save(
@@ -157,6 +159,115 @@ export class SysUserService {
     entity.password = '';
 
     return entity;
+  }
+
+  async updaetSuser(model: UpdateSUserModel) {
+    const { id, username, orgid, email, phone, nickname, remark } = model;
+    if (!username?.length)
+      throw BizException.IllegalParamterError(`用户名必填`);
+    const find = await this.getById(id);
+    if (!find)
+      throw BizException.createError(
+        ErrorCodeEnum.DATA_RECORD_REMOVED,
+        `用户ID [${id}]不存在.`,
+      );
+
+    if (!email?.length && !phone.length) {
+      throw BizException.IllegalParamterError(`邮箱和手机至少填写一项`);
+    }
+    const repeatUname = await this.checkUserNameRepeat(id, username, orgid);
+    if (repeatUname > 0)
+      throw BizException.createError(
+        ErrorCodeEnum.DATA_RECORD_CONFLICT,
+        `用户名[${username}]已存在`,
+      );
+
+    if (email?.length) {
+      const repeatEmail = await this.checkEmailRepeat(id, email);
+      if (repeatEmail > 0)
+        throw BizException.createError(
+          ErrorCodeEnum.DATA_RECORD_CONFLICT,
+          `用户邮箱[${email}]已绑定其他账号`,
+        );
+    }
+
+    if (phone?.length) {
+      const repeatPhone = await this.checkPhoneRepeat(id, phone);
+      if (repeatPhone > 0)
+        throw BizException.createError(
+          ErrorCodeEnum.DATA_RECORD_CONFLICT,
+          `用户手机[${phone}]已绑定其他账号`,
+        );
+    }
+
+    const { affected } = await this.accRepository
+      .createQueryBuilder()
+      .update(SystemUserEntity)
+      .set({
+        username,
+        email: email ?? find.email,
+        phone: phone ?? find.phone,
+        orgid: orgid ?? find.orgid,
+        nickname,
+        remark,
+      })
+      .where({ id })
+      .execute();
+
+    return affected > 0;
+  }
+
+  async checkUserNameRepeat(
+    id: number,
+    username: string,
+    orgid?: number,
+  ): Promise<number> {
+    const qb = this.accRepository.createQueryBuilder('suser');
+
+    const map = new Map();
+
+    map.set('username', Equal(username));
+    if (typeof orgid !== 'undefined') {
+      map.set('orgid', Equal(orgid));
+    }
+
+    const count = await qb
+      .withDeleted()
+      .where(mapToObj(map))
+      .andWhere('id != :id', { id })
+      .getCount();
+
+    return count;
+  }
+
+  async checkPhoneRepeat(id: number, phone: string): Promise<number> {
+    const qb = this.accRepository.createQueryBuilder('suser');
+
+    const map = new Map();
+    map.set('phone', Equal(phone));
+
+    const count = await qb
+      .withDeleted()
+      .where(mapToObj(map))
+      .andWhere('id != :id', { id })
+      .getCount();
+
+    return count;
+  }
+
+  async checkEmailRepeat(id: number, email: string): Promise<number> {
+    const qb = this.accRepository.createQueryBuilder('suser');
+
+    const map = new Map();
+    map.set('email', Equal(email));
+
+    const count = await qb
+      .withDeleted()
+      .where(mapToObj(map))
+      .andWhere('id != :id', { id })
+      .getCount();
+
+    return count;
   }
 
   /**
@@ -198,6 +309,48 @@ export class SysUserService {
     );
   }
 
+  async initSuperUser(): Promise<string> {
+    const superUsers = await this.accountReository
+      .createQueryBuilder('suser')
+      .withDeleted()
+      .where({ isSuper: true })
+      .getMany();
+    if (superUsers?.length) {
+      return `Super User has been exists.[${superUsers[0].username}]`;
+    }
+    const nextno = await this.nextnoService.getEnableNextNo(
+      NextNoBiztype.USER.valueOf(),
+    );
+    const { uno, value } = await RandomHelper.buildUno(nextno, ['6489']);
+    const time = new Date(1989, 5, 4).setHours(4, 15, 0, 0);
+    const pass = 'admin@123';
+    const enpw = await this.encryptPassword(pass);
+    const created: Partial<SystemUserEntity> = {
+      username: 'admin',
+      phone: '18810106688',
+      email: 'admin@tsailab.ai',
+      nickname: value,
+      orgid: ROOT_TREE_NODE_ID,
+      userno: uno,
+      avatar:
+        'https://ucarecdn.com/f00b8fd7-326a-47b8-80f8-6c15eccb112c/appletouchicon.png',
+      status: UserStatusEnum.NORMAL,
+      platform: PlatformEnum.SYSTEM_PLATFORM,
+      remark: 'Super Admin',
+      createdAt: new Date(time),
+      updatedAt: new Date(time),
+      password: enpw,
+      isSuper: true,
+    };
+
+    const entity = await this.accountReository.save(created);
+    await this.nextnoService.updateNextnoUsed(
+      NextNoBiztype.USER.valueOf(),
+      nextno,
+    );
+    return `Super User [${entity.username}] created, password is [${pass}]`;
+  }
+
   static convertToUser(entity: SystemUserEntity) {
     const {
       id,
@@ -209,7 +362,7 @@ export class SysUserService {
       status,
       acctype,
       openid,
-      orgno,
+      orgid,
       avatar,
       nickname,
       unionid,
@@ -219,7 +372,7 @@ export class SysUserService {
 
     const user: IUser = {
       id,
-      orgno,
+      orgid,
       userno,
       username,
       email,

@@ -11,4 +11,6 @@ export declare class OrganizationController {
     addOrganizationInfo(dto: AddOrganizationModel): Promise<import("@tsailab/system").OrganizationEntity>;
     getLevelTreeList(pid?: number): Promise<import("@tsailab/system").OrganizationTreeNode[]>;
     getSelectionNodes(pid: number): Promise<import("@tsailab/core-types").TreeNodeOptionType[]>;
+    getCascadeNodes(pid: number): Promise<import("@tsailab/core-types").TreeNodeOptionType[]>;
+    getNextOrgno(pid?: number): Promise<string>;
 }

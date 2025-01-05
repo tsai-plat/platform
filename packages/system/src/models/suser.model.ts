@@ -11,5 +11,15 @@ export class CreateSUserModel {
   isSuper?: boolean;
   platform?: PlatformEnum;
   openid?: string;
-  orgno?: string;
+  orgid?: number;
+}
+
+export class UpdateSUserModel {
+  id: number;
+  phone: string; // uni
+  email: string; // uni
+  username?: string;
+  nickname?: string;
+  orgid?: number;
+  remark?: string;
 }

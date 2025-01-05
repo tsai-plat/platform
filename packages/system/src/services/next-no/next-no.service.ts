@@ -36,7 +36,7 @@ export class NextNoService {
     locked?: boolean,
   ): Promise<number> {
     if (batchSize <= 0 || batchSize > 10000)
-      throw BizException.IllegalParamterError(`Max batch size require 1~5000`);
+      throw BizException.IllegalParamterError(`Max batch size require 1~1000`);
 
     const qb = this.nextnoRepository.createQueryBuilder();
 
@@ -121,5 +121,20 @@ export class NextNoService {
       used: true,
     });
     return true;
+  }
+
+  async autoInitBatchNosOnModuleInit(
+    biztype: number = 1,
+    batchSize: number = 1000,
+  ) {
+    const qb = this.nextnoRepository.createQueryBuilder();
+
+    const unusedCnt = await qb
+      .andWhere({ biztype, used: false, locked: false })
+      .getCount();
+
+    if (unusedCnt > 100) return 0;
+    await this.initicalizeNextBatchNos(biztype, batchSize);
+    return batchSize;
   }
 }

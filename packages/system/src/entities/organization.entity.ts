@@ -1,6 +1,6 @@
 import { BaseEntity } from '@tsailab/common';
 import { StatusEnum } from '@tsailab/core-types';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { Column, Entity, Index } from 'typeorm';
 
 @Entity({ name: 'sys_organization', synchronize: true })
@@ -12,6 +12,8 @@ export class OrganizationEntity extends BaseEntity {
     default: 0,
     comment: 'parent id',
   })
+  @Type(() => Number)
+  @Transform(({ value }) => Number(value))
   pid?: number;
 
   @Column({
@@ -36,7 +38,7 @@ export class OrganizationEntity extends BaseEntity {
     type: 'varchar',
     nullable: true,
     name: 'code',
-    comment: 'org code',
+    comment: 'org level code',
   })
   code?: string;
 
@@ -55,6 +57,30 @@ export class OrganizationEntity extends BaseEntity {
     comment: 'organization icon',
   })
   icon?: string;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
+    name: 'contact',
+    comment: 'organization contact',
+  })
+  contact?: string;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
+    name: 'email',
+    comment: 'organization email',
+  })
+  email?: string;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
+    name: 'phone',
+    comment: 'organization phone',
+  })
+  phone?: string;
 
   @Column({
     type: 'varchar',

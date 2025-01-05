@@ -4,6 +4,7 @@ import { OrganizationEntity } from '../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BizException, ErrorCodeEnum } from '@tsailab/common';
 import {
+  ROOT_TRRE_NODE_PID,
   SetSortnoData,
   SetStatusData,
   StatusEnum,
@@ -19,6 +20,10 @@ export const ROOT_NODE_ID = 0;
 
 @Injectable()
 export class OrganizationService {
+  private readonly ROOT_CODE_LENGTH = 3;
+  private readonly CODE_LENGTH = 2;
+  private readonly CODE_PREFIX = '8';
+  private readonly MAX_CODE_LENGTH = 13;
   constructor(
     @InjectRepository(OrganizationEntity)
     private readonly orgRepository: Repository<OrganizationEntity>,
@@ -227,6 +232,92 @@ export class OrganizationService {
 
   /**
    *
+   * @param rootPid
+   * @returns tree nodes
+   */
+  async getCommonTreeNodes(
+    rootPid: number = ROOT_TRRE_NODE_PID,
+  ): Promise<TreeNodeOptionType[]> {
+    const qb = this.orgRepository.createQueryBuilder('org');
+    const rootEntities = await qb
+      .andWhere('pid = :pid', { pid: rootPid })
+      .orderBy('sortno', 'ASC')
+      .addOrderBy('name', 'ASC')
+      .getMany();
+    const treeNodes: TreeNodeOptionType[] = [];
+    if (!rootEntities?.length) return treeNodes;
+
+    for (let i = 0; i < rootEntities.length; i++) {
+      let rootNode = await OrganizationService.convertEntityToTreeNodeOption(
+        rootEntities[i],
+      );
+      rootNode = await this.subTreeNodes(rootNode);
+      treeNodes.push(rootNode);
+    }
+
+    return treeNodes;
+  }
+
+  async subTreeNodes(node: TreeNodeOptionType): Promise<TreeNodeOptionType> {
+    const pid = node.id;
+    const qb = this.orgRepository.createQueryBuilder('org');
+
+    const subEntities = await qb
+      .where({ pid })
+      .orderBy('sortno', 'ASC')
+      .addOrderBy('name', 'ASC')
+      .getMany();
+
+    if (!subEntities?.length) {
+      node.isLeaf = true;
+      node.children = [];
+      return node;
+    }
+    if (!node.children) node.children = [];
+    for (let i = 0; i < subEntities.length; i++) {
+      const entity = subEntities[i];
+      const treeNode =
+        await OrganizationService.convertEntityToTreeNodeOption(entity);
+      node.children.push(treeNode);
+      await this.subTreeNodes(treeNode);
+    }
+
+    return node;
+  }
+
+  async addOrganization(
+    dto: AddOrganizationModel,
+  ): Promise<OrganizationEntity | never> {
+    const someEntity = await this.checkRepeat(dto);
+    const parent = await this.orgRepository.findOneBy({
+      id: dto.pid ?? ROOT_TRRE_NODE_PID,
+    });
+    const level = await this.getNextLevel(parent);
+    const code = await this.getNextLevelCodeByPid(dto.pid);
+    const orgno = await this.autoGenerateOrgno(parent ?? null);
+
+    if (parent && parent.level && parent.level > 5) {
+      throw BizException.createError(
+        ErrorCodeEnum.DATA_RECORD_CONFLICT,
+        `组织层级不能超过6级`,
+      );
+    }
+
+    const entity = this.orgRepository.save(
+      await this.orgRepository.create({
+        ...dto,
+        ...someEntity,
+        level,
+        orgno,
+        code,
+      }),
+    );
+
+    return entity;
+  }
+
+  /**
+   *
    * @param pid
    * @returns
    */
@@ -246,16 +337,61 @@ export class OrganizationService {
     return treeNodes;
   }
 
-  async addOrganization(
-    dto: AddOrganizationModel,
-  ): Promise<OrganizationEntity | never> {
-    const someEntity = await this.checkRepeat(dto);
+  private async getNextLevel(
+    parent: OrganizationEntity | null,
+  ): Promise<number> {
+    if (!parent) return Promise.resolve(1);
+    const { level = 0 } = parent;
+    return level.valueOf() + 1;
+  }
 
-    const entity = this.orgRepository.save(
-      await this.orgRepository.create({ ...dto, ...someEntity }),
+  /**
+   *
+   * @param pid number or null
+   * @returns next level code
+   */
+  private async getNextLevelCodeByPid(
+    pid: number = ROOT_TRRE_NODE_PID,
+  ): Promise<string> {
+    const qb = this.orgRepository.createQueryBuilder('org');
+    const { maxCode } = await qb
+      .select('MAX(org.code)', 'maxCode')
+      .where('pid = :pid', { pid })
+      .getRawOne();
+    if (!maxCode?.length) {
+      return '1'.padStart(
+        pid === ROOT_TRRE_NODE_PID ? this.ROOT_CODE_LENGTH : this.CODE_LENGTH,
+        '0',
+      );
+    }
+
+    const nextCode = `${parseInt(maxCode) + 1}`;
+
+    return nextCode.padStart(
+      pid === ROOT_TRRE_NODE_PID ? this.ROOT_CODE_LENGTH : this.CODE_LENGTH,
+      '0',
     );
+  }
 
-    return entity;
+  async getNextOrgnoByPid(pid: number): Promise<string> {
+    const parent = await this.orgRepository.findOneBy({ id: pid });
+    return await this.autoGenerateOrgno(parent);
+  }
+
+  async autoGenerateOrgno(parent: OrganizationEntity | null): Promise<string> {
+    const nextCode = await this.getNextLevelCodeByPid(parent?.id);
+    const rootOrgno = `${this.CODE_PREFIX}${nextCode}`;
+    if (!parent)
+      return `${rootOrgno.padEnd(this.MAX_CODE_LENGTH + this.CODE_PREFIX.length, '0')}`;
+
+    const { orgno = rootOrgno, level = 1 } = parent;
+
+    const start = this.CODE_PREFIX.length;
+    const end = this.CODE_LENGTH * level + start + 1;
+
+    const nextOrgno = `${orgno.slice(start, end)}${nextCode}`;
+
+    return `${this.CODE_PREFIX}${nextOrgno.padEnd(this.MAX_CODE_LENGTH, '0')}`;
   }
 
   async updateStatus(dto: SetStatusData): Promise<StatusEnum | never> {
@@ -339,6 +475,35 @@ export class OrganizationService {
     }
 
     return node;
+  }
+
+  async initRootNode(): Promise<void> {
+    const entities = await this.orgRepository.findBy({
+      pid: ROOT_TRRE_NODE_PID,
+    });
+
+    if (entities?.length) return;
+    const rootLevelCode = await this.getNextLevelCodeByPid(ROOT_TRRE_NODE_PID);
+    const orgno = await this.autoGenerateOrgno(null);
+    const time = new Date(1989, 5, 4).setHours(4, 15, 0, 0);
+    const root: Partial<OrganizationEntity> = {
+      id: ROOT_NODE_ID,
+      pid: ROOT_TRRE_NODE_PID,
+      name: 'Group Headquarters',
+      shortName: 'GHQ',
+      orgno: orgno,
+      code: rootLevelCode,
+      level: 1,
+      contact: 'admin',
+      email: 'techservice@lotolab@com',
+      phone: '400-123-4567',
+      sortno: 0,
+      status: StatusEnum.NORMAL,
+      description: 'Group Headquarters init',
+      createdAt: new Date(time),
+      updatedAt: new Date(time),
+    };
+    await this.orgRepository.save(root);
   }
 
   private async checkRepeat(
@@ -441,5 +606,43 @@ export class OrganizationService {
     };
 
     return node;
+  }
+
+  static convertEntityToTreeNodeOption(
+    entity: OrganizationEntity,
+  ): TreeNodeOptionType {
+    const {
+      id,
+      pid,
+      name,
+      code,
+      shortName,
+      icon,
+      level,
+      status,
+      locking,
+      sortno,
+      orgno,
+    } = entity;
+    const isLeaf = true;
+
+    return {
+      id: id,
+      key: id,
+      label: name,
+      icon,
+      pid: pid,
+      isLeaf: isLeaf,
+      level,
+      disabled: status !== StatusEnum.NORMAL || locking,
+      extra: {
+        id,
+        pid,
+        code,
+        shortName,
+        sortno,
+        orgno,
+      },
+    } as TreeNodeOptionType;
   }
 }

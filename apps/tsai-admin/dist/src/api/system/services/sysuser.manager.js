@@ -52,9 +52,10 @@ let SysUserManager = SysUserManager_1 = class SysUserManager {
             list: data ?? [],
         };
     }
-    updateSystemUserStatus(dto) {
+    async updateSystemUserStatus(dto) {
         const { id, status } = dto;
-        return this.sysUserService.setUserStatus(id, status);
+        const { affected } = await this.sysUserService.setUserStatus(id, status);
+        return affected > 0;
     }
     async resetSystemUserPassword(dto, user) {
         if (!user?.id || !user.isSuper) {
@@ -64,6 +65,18 @@ let SysUserManager = SysUserManager_1 = class SysUserManager {
             throw common_2.BizException.createError(common_2.ErrorCodeEnum.USER_NO_PERMISSION, '不能重置自己的密码');
         }
         const { id, password } = dto;
+        await this.sysConfigService.verifyPasswordStrength(password);
+        const { affected } = await this.sysUserService.resetPassword(id, password);
+        return affected > 0;
+    }
+    async resetSystemUserPasswordByDefault(id, user) {
+        if (!user?.id || !user.isSuper) {
+            throw common_2.BizException.createError(common_2.ErrorCodeEnum.USER_NO_PERMISSION, '您无权重置密码,请联系超级管理员!');
+        }
+        if (id === user.id) {
+            throw common_2.BizException.createError(common_2.ErrorCodeEnum.USER_NO_PERMISSION, '不能重置自己的密码');
+        }
+        const password = await this.sysConfigService.suserDefaultPw;
         const { affected } = await this.sysUserService.resetPassword(id, password);
         return affected > 0;
     }
@@ -73,6 +86,21 @@ let SysUserManager = SysUserManager_1 = class SysUserManager {
             dto.password = pw;
         }
         return await this.sysUserService.createSuser(dto);
+    }
+    async setUserIsSuper(id, isSuper = false) {
+        const find = await this.sysUserService.getById(id);
+        if (!find)
+            throw common_2.BizException.createError(common_2.ErrorCodeEnum.DATA_RECORD_REMOVED, `用户不存在`);
+        const { affected } = await this.sysUserService.accRepository
+            .createQueryBuilder('user')
+            .update(system_1.SystemUserEntity)
+            .set({ isSuper })
+            .where({ id })
+            .execute();
+        return affected > 0;
+    }
+    updateSystemUserSome(dto) {
+        return this.sysUserService.updaetSuser(dto);
     }
 };
 exports.SysUserManager = SysUserManager;

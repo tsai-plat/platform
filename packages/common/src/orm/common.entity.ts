@@ -18,14 +18,16 @@ export class CommonEntity extends BaseEntity {
   @Transform(({ value }) => Number(value))
   id: number;
 
+  @Type(() => Number)
+  @Transform(({ value }) => Number(value))
   @Column({
-    type: 'varchar',
+    type: 'int',
     nullable: true,
-    default: 'NA',
-    name: 'orgno',
-    comment: 'orgno',
+    default: '0',
+    name: 'orgid',
+    comment: 'orgid',
   })
-  orgno: string;
+  orgid?: number;
 
   @Column({
     type: 'int',

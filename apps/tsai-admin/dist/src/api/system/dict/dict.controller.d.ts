@@ -22,7 +22,7 @@ export declare class DictController {
         sortno: number;
         status: import("@tsailab/core-types").StatusEnum;
         items: Array<import("@tsailab/system").SysDictItemEntity>;
-        orgno: string;
+        orgid?: number;
         createdBy?: number;
         updatedBy?: number;
         createdAt: Date;
@@ -48,7 +48,7 @@ export declare class DictController {
         sortno: number;
         status: import("@tsailab/core-types").StatusEnum;
         defaultActived: boolean;
-        orgno: string;
+        orgid?: number;
         createdBy?: number;
         updatedBy?: number;
         createdAt: Date;
