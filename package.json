@@ -29,8 +29,9 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "8.1.0",
     "@nestjs/typeorm": "^10.0.2",
-    "@tsailab/core-types": "0.0.9",
+    "@tsailab/core-types": "0.0.12",
     "class-transformer": "^0.5.1",
+    "date-fns": "4.1.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20"
@@ -87,7 +88,6 @@
       "^@tsailab/common(|/.*)$": "<rootDir>/packages/common/dist/$1",
       "^@tsailab/cache(|/.*)$": "<rootDir>/packages/cache/dist/$1",
       "^@tsai-platform/core(|/.*)$": "<rootDir>/packages/core/dist/$1",
-      "^@tsai-platform/ucenter(|/.*)$": "<rootDir>/packages/ucenter/dist/$1",
       "^@tsailab/cache-redis(|/.*)$": "<rootDir>/packages/cache-redis/dist/$1",
       "^@tsailab/node-redis(|/.*)$": "<rootDir>/packages/node-redis/dist/$1",
       "^@tsailab/system(|/.*)$": "<rootDir>/packages/system/dist/$1"

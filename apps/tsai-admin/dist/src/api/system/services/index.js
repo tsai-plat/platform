@@ -1,21 +1,10 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NextNoManager = void 0;
+exports.SysUserManager = exports.CustomManager = exports.NextNoManager = void 0;
 var next_no_manager_1 = require("./next-no.manager");
 Object.defineProperty(exports, "NextNoManager", { enumerable: true, get: function () { return next_no_manager_1.NextNoManager; } });
-__exportStar(require("./sysuser.manager"), exports);
+var custom_manager_1 = require("./custom.manager");
+Object.defineProperty(exports, "CustomManager", { enumerable: true, get: function () { return custom_manager_1.CustomManager; } });
+var sysuser_manager_1 = require("./sysuser.manager");
+Object.defineProperty(exports, "SysUserManager", { enumerable: true, get: function () { return sysuser_manager_1.SysUserManager; } });
 //# sourceMappingURL=index.js.map

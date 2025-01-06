@@ -29,7 +29,6 @@
         "@nestjs/passport": "10.0.3",
         "@nestjs/platform-express": "^10.0.0",
         "@nestjs/swagger": "8.1.0",
-        "@tsai-platform/ucenter": "workspace:*",
         "@tsailab/common": "workspace:*",
         "@tsailab/ioredis-mq": "0.0.4",
         "@tsailab/node-redis": "workspace:*",

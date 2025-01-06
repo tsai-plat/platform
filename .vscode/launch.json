@@ -27,6 +27,30 @@
             "outFiles": [
                 "${workspaceFolder}/apps/tsai-admin/dist/**/*.js"
             ]
-        }
+        },
+        {
+          "type": "node",
+          "request": "launch",
+          "name": "DEBUG Client-api API",
+          "runtimeExecutable": "npm",
+          "runtimeArgs": [
+            "run",
+            "dev",
+            "--",
+            "--inspect-brk=9979"
+          ],
+          "autoAttachChildProcesses": true,
+          "console": "integratedTerminal",
+          "sourceMaps": true,
+          "restart": true,
+          "stopOnEntry": false,            
+          "skipFiles": [
+              "<node_internals>/**"
+          ],
+          "cwd": "${workspaceFolder}/apps/client",
+          "outFiles": [
+              "${workspaceFolder}/apps/client/dist/**/*.js"
+          ]
+      }
     ]
 }

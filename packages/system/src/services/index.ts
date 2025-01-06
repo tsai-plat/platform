@@ -5,3 +5,4 @@ export { DictService } from './dict.service';
 export { RegionService } from './region.service';
 export { OrganizationService } from './organization.service';
 export { RoleService } from './role.service';
+export { UserService } from './user-service';

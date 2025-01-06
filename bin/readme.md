@@ -3,7 +3,9 @@
 ## ssltool
 
 ```bash
-bash bin/ssltool.sh --ssl-trusted-ip=127.0.0.1 \
+# default tsai-admin
+export APP_NAME=client
+bash bin/gencert.sh --ssl-trusted-ip=127.0.0.1 
 
 ```
 

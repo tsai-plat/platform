@@ -16,7 +16,6 @@ const typeorm_1 = require("@nestjs/typeorm");
 const core_2 = require("@nestjs/core");
 const api_module_1 = require("./api/api.module");
 const app_core_module_1 = require("./appcore/app-core.module");
-const ucenter_1 = require("@tsai-platform/ucenter");
 const system_1 = require("@tsailab/system");
 const ioredis_mq_1 = require("@tsailab/ioredis-mq");
 const common_2 = require("@tsailab/common");
@@ -49,7 +48,6 @@ exports.AppModule = AppModule = __decorate([
             typeorm_1.TypeOrmModule.forRootAsync({
                 useClass: core_1.MysqlConfigFactory,
             }),
-            ucenter_1.UcenterModule.forRoot({ isGlobal: true }),
             system_1.SystemModule.forRoot(true),
             app_core_module_1.AppCoreModule,
             api_module_1.ApiModule,

@@ -11,10 +11,8 @@ import {
 } from '@tsai-platform/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-
 import { ApiModule } from './api/api.module';
 import { AppCoreModule } from './appcore/app-core.module';
-import { UcenterModule } from '@tsai-platform/ucenter';
 import { SystemModule } from '@tsailab/system';
 import { IORedisModuleOptions, IORedisMQModule } from '@tsailab/ioredis-mq';
 import { BizException, ErrorCodeEnum } from '@tsailab/common';
@@ -47,7 +45,6 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forRootAsync({
       useClass: MysqlConfigFactory,
     }),
-    UcenterModule.forRoot({ isGlobal: true }),
     SystemModule.forRoot(true),
     AppCoreModule,
     ApiModule,

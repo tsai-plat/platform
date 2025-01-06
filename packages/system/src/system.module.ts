@@ -9,12 +9,14 @@ import {
   SysDictItemEntity,
   SystemRegionEntity,
   SystemUserEntity,
+  UserEntity,
 } from './entities';
 import {
   DictService,
   NextNoService,
   SystemConfigService,
   SysUserService,
+  UserService,
 } from './services';
 import { RegionService } from './services/region.service';
 import { OrganizationService } from './services/organization.service';
@@ -38,6 +40,7 @@ export class SystemModule {
           SystemRegionEntity,
           OrganizationEntity,
           RoleEntity,
+          UserEntity,
         ]),
       ],
       providers: [
@@ -48,6 +51,7 @@ export class SystemModule {
         RegionService,
         OrganizationService,
         RoleService,
+        UserService,
       ],
       exports: [
         DictService,
@@ -57,6 +61,7 @@ export class SystemModule {
         RegionService,
         OrganizationService,
         RoleService,
+        UserService,
       ],
     };
   }

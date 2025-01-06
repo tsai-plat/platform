@@ -20,6 +20,15 @@
         "tsConfigPath": "apps/tsai-admin/tsconfig.build.json"
       }
     },
+    "client": {
+      "type": "application",
+      "root": "apps/client",
+      "entryFile": "main",
+      "sourceRoot": "apps/client/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/client/tsconfig.build.json"
+      }
+    },
     "common": {
       "type": "library",
       "root": "packages/common",
@@ -47,15 +56,6 @@
         "tsConfigPath": "packages/core/tsconfig.pkg.json"
       }
     },
-    "ucenter": {
-      "type": "library",
-      "root": "packages/ucenter",
-      "entryFile": "index",
-      "sourceRoot": "packages/ucenter/src",
-      "compilerOptions": {
-        "tsConfigPath": "packages/ucenter/tsconfig.lib.json"
-      }
-    },
     "cache-redis": {
       "type": "library",
       "root": "packages/cache-redis",
@@ -72,15 +72,6 @@
       "sourceRoot": "packages/system/src",
       "compilerOptions": {
         "tsConfigPath": "packages/system/tsconfig.pkg.json"
-      }
-    },
-    "api-v1": {
-      "type": "application",
-      "root": "apps/api-v1",
-      "entryFile": "main",
-      "sourceRoot": "apps/api-v1/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/api-v1/tsconfig.app.json"
       }
     }
   }

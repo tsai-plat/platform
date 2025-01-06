@@ -13,8 +13,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppService = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
-const ucenter_1 = require("@tsai-platform/ucenter");
 const common_2 = require("@tsailab/common");
+const system_1 = require("@tsailab/system");
 let AppService = AppService_1 = class AppService {
     constructor(config, userService) {
         this.config = config;
@@ -31,6 +31,6 @@ exports.AppService = AppService;
 exports.AppService = AppService = AppService_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [config_1.ConfigService,
-        ucenter_1.UserService])
+        system_1.UserService])
 ], AppService);
 //# sourceMappingURL=app.service.js.map

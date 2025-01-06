@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UserService } from '@tsai-platform/ucenter';
+import { UserService } from '@tsailab/system';
 export declare class AppService {
     private readonly config;
     private readonly userService;

@@ -2,7 +2,13 @@
 basepath=$(cd `dirname $0`;pwd);
 workspace=$(cd `dirname $0`;cd ..;pwd);
 
-certsDir=${workspace}/apps/tsai-admin/.conf/certs
+if [ -z "$APP_NAME" ];then
+  APP_NAME=tsai-admin
+fi
+
+
+
+certsDir=${workspace}/apps/${APP_NAME}/.conf/certs
 
 if [ ! -d "$certsDir" ];then 
     mkdir -p $certsDir
