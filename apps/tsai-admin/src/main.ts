@@ -61,20 +61,22 @@ async function bootstrap() {
     const docDesc = configService.get<string>('swagger.docDesc', description);
     const wikiUrl = configService.get<string>(
       'swagger.wiki',
-      'https://github.com/tsai-plat/tsai-cli#readme',
+      'https://github.com/tsai-plat',
     );
 
-    const options = new DocumentBuilder()
-      .setBasePath(`/${apiPrefix}/`)
-      .setTitle(docTitle)
-      .setDescription(docDesc)
-      .addBearerAuth()
-      .addTag(`api-${apiPrefix}`)
-      .setVersion(version ?? '1.0.0')
-      .setContact(author ?? 'tsai', wikiUrl, 'lamborcai@gmail.com')
-      .build();
+    const options = //new DocumentBuilder().setBasePath(`/${apiPrefix}/`)
+      new DocumentBuilder()
+        .setBasePath(`/${apiPrefix}/`)
+        .setTitle(docTitle)
+        .setDescription(docDesc)
+        .addBearerAuth()
+        .addTag(`api-${apiPrefix}`)
+        .setVersion(version ?? '1.0.0')
+        .setContact(author ?? 'tsai', wikiUrl, 'lamborcai@gmail.com')
+        .addServer(`https://127.0.0.1:${appPort}`, docDesc, {})
+        .build();
 
-    const document = await SwaggerModule.createDocument(app, options);
+    const document = () => SwaggerModule.createDocument(app, options);
     await SwaggerModule.setup(`docs-${apiPrefix}`, app, document);
   }
 

@@ -24,7 +24,11 @@ export class CustomManager {
       endDate,
     } = dto;
 
-    let qb = this.userService.respository.createQueryBuilder('c').withDeleted();
+    let qb = this.userService.respository
+      .createQueryBuilder('c')
+      .withDeleted()
+      .select()
+      .addSelect('ISNULL(c.password)', 'c_pwunset');
 
     if (status !== undefined)
       qb = qb.andWhere('c.status = :status', { status });

@@ -13,11 +13,11 @@ import {
   mapToObj,
   RandomHelper,
 } from '@tsailab/common';
-import { NextNoService } from '../next-no/next-no.service';
+
 import { SystemConfigService } from '../system.config.service';
 import {
   IUser,
-  NextNoBiztype,
+  NextNoType,
   PlatformEnum,
   ROOT_TREE_NODE_ID,
   UserStatusEnum,
@@ -25,8 +25,8 @@ import {
 
 @Injectable()
 export class SysUserService {
+  public readonly nextnoType = NextNoType.USER;
   constructor(
-    private readonly nextnoService: NextNoService,
     private readonly sysConfService: SystemConfigService,
     @InjectRepository(SystemUserEntity)
     private readonly accountReository: Repository<SystemUserEntity>,
@@ -63,102 +63,6 @@ export class SysUserService {
     }
 
     return user;
-  }
-
-  /**
-   *
-   * @param model
-   */
-  async createSuser(model: CreateSUserModel, enpassword?: string) {
-    this.validCreateSUserModel(model);
-    if (!model.password && !enpassword) {
-      throw BizException.IllegalParamterError(
-        `Password in model or enpassword at latest one.`,
-      );
-    }
-
-    const {
-      phone,
-      email,
-      openid,
-      username,
-      orgid = ROOT_TREE_NODE_ID,
-      avatar,
-      platform = PlatformEnum.SYSTEM_PLATFORM,
-      isSuper = false,
-    } = model;
-
-    const qb = this.accountReository.createQueryBuilder('suser');
-    let dbUser;
-    if (phone?.length) {
-      dbUser = await qb.where({ phone }).getOne();
-      if (dbUser) {
-        throw BizException.createError(
-          ErrorCodeEnum.DATA_RECORD_CONFLICT,
-          `The phone [${phone}] has been exists in System.`,
-        );
-      }
-    }
-    if (email?.length) {
-      dbUser = await qb.where({ email }).getOne();
-      if (dbUser) {
-        throw BizException.createError(
-          ErrorCodeEnum.DATA_RECORD_CONFLICT,
-          `The email [${email}] has been exists in System.`,
-        );
-      }
-    }
-
-    if (openid?.length) {
-      dbUser = await qb.where({ openid }).getOne();
-      if (dbUser) {
-        throw BizException.createError(
-          ErrorCodeEnum.DATA_RECORD_CONFLICT,
-          `The Wechat openid has been bind an user in System.`,
-        );
-      }
-    }
-
-    const enpw = enpassword?.length
-      ? enpassword
-      : await BcryptHelper.encryptPassword(model.password);
-
-    const nextno = await this.nextnoService.getEnableNextNo(
-      NextNoBiztype.USER.valueOf(),
-    );
-    const { uno, value } = await RandomHelper.buildUno(
-      nextno,
-      this.sysConfService.getUnoSeeds(),
-    );
-
-    const created: Partial<SystemUserEntity> = {
-      userno: uno,
-      username: username ?? uno,
-      nickname: username ?? value,
-      phone,
-      email,
-      password: enpw,
-      avatar,
-      status: UserStatusEnum.NORMAL,
-      isSuper,
-      platform,
-      openid,
-      orgid,
-    };
-
-    const entity = await this.accountReository.save(
-      this.accountReository.create(created),
-    );
-
-    //
-    await this.nextnoService.updateNextnoUsed(
-      NextNoBiztype.USER.valueOf(),
-      nextno,
-    );
-
-    entity.password = '';
-
-    return entity;
   }
 
   async updaetSuser(model: UpdateSUserModel) {
@@ -318,10 +222,8 @@ export class SysUserService {
     if (superUsers?.length) {
       return `Super User has been exists.[${superUsers[0].username}]`;
     }
-    const nextno = await this.nextnoService.getEnableNextNo(
-      NextNoBiztype.USER.valueOf(),
-    );
-    const { uno, value } = await RandomHelper.buildUno(nextno, ['6489']);
+    // const nextno = await this.nextnoCacher.getNextno(this.nextnoType);
+    const { uno, value } = await RandomHelper.buildUno(0, ['6489']);
     const time = new Date(1989, 5, 4).setHours(4, 15, 0, 0);
     const pass = 'admin@123';
     const enpw = await this.encryptPassword(pass);
@@ -344,10 +246,7 @@ export class SysUserService {
     };
 
     const entity = await this.accountReository.save(created);
-    await this.nextnoService.updateNextnoUsed(
-      NextNoBiztype.USER.valueOf(),
-      nextno,
-    );
+    // await this.nextnoCacher.setHash(this.nextnoType, nextno);
     return `Super User [${entity.username}] created, password is [${pass}]`;
   }
 

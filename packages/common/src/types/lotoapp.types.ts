@@ -12,6 +12,7 @@ export type LotoHeadersType = {
   orgno: string;
   reqid: string;
   cliid: string;
+  clit?: string;
   ip: string;
   session?: IUserSession;
   [k: string]: any;

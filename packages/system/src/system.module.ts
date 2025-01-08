@@ -2,6 +2,7 @@ import { DynamicModule, Module } from '@nestjs/common';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
+  ClientLogEntity,
   NextNoEntity,
   OrganizationEntity,
   RoleEntity,
@@ -13,7 +14,6 @@ import {
 } from './entities';
 import {
   DictService,
-  NextNoService,
   SystemConfigService,
   SysUserService,
   UserService,
@@ -21,9 +21,10 @@ import {
 import { RegionService } from './services/region.service';
 import { OrganizationService } from './services/organization.service';
 import { RoleService } from './services/role.service';
+import { ClientLogService } from './services/client-log.service';
 
 @Module({
-  providers: [],
+  providers: [ClientLogService],
   exports: [],
 })
 export class SystemModule {
@@ -33,6 +34,7 @@ export class SystemModule {
       global: isGlobal,
       imports: [
         TypeOrmModule.forFeature([
+          ClientLogEntity,
           NextNoEntity,
           SysDictEntity,
           SysDictItemEntity,
@@ -44,8 +46,8 @@ export class SystemModule {
         ]),
       ],
       providers: [
+        ClientLogService,
         DictService,
-        NextNoService,
         SystemConfigService,
         SysUserService,
         RegionService,
@@ -54,8 +56,8 @@ export class SystemModule {
         UserService,
       ],
       exports: [
+        ClientLogService,
         DictService,
-        NextNoService,
         SystemConfigService,
         SysUserService,
         RegionService,

@@ -4,9 +4,15 @@ import { AppService } from './app.service';
 import { AppcoreModule } from './core/appcore.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { yamlConfigLoader } from '@tsailab/ioredis-mq';
-import { isProdRuntime, MysqlConfigFactory } from '@tsai-platform/core';
+import {
+  ApiTransformInterceptor,
+  isProdRuntime,
+  MysqlConfigFactory,
+} from '@tsai-platform/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApiModule } from './api/api.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,9 +30,16 @@ import { ApiModule } from './api/api.module';
       inject: [ConfigService],
     }),
     AppcoreModule,
+    AuthModule,
     ApiModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ApiTransformInterceptor,
+    },
+  ],
 })
 export class AppModule {}

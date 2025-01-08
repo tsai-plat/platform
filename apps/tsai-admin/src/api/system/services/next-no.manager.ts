@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { BizException, RandomHelper } from '@tsailab/common';
-import { NextNoService } from '@tsailab/system';
+import { NextNoCacheManager } from '@tsai-platform/core';
+import { RandomHelper } from '@tsailab/common';
+import { NextNoType } from '@tsailab/core-types';
 
 @Injectable()
 export class NextNoManager {
   private seeds: Array<any> = [];
   constructor(
     private readonly config: ConfigService,
-    private readonly nextnoService: NextNoService,
+    private readonly nextnoCacher: NextNoCacheManager,
   ) {
     const conf = config.get('system.unoSeeds', null);
     if (conf && Array.isArray(conf)) {
@@ -21,28 +22,12 @@ export class NextNoManager {
     }
   }
 
-  async batchInitNextnos(size: number, biztype: number, locked?: boolean) {
-    if (size <= 0)
-      throw BizException.IllegalParamterError(
-        `init size volume required more than zero.`,
-      );
-    const maxno = await this.nextnoService.initicalizeNextBatchNos(
-      biztype,
-      size,
-      locked,
-    );
-
-    // reload cache
-
-    return {
-      currentMaxNo: maxno,
-      size,
-      biztype,
-    };
+  async batchInitNextnos(size: number = 1000) {
+    return await this.nextnoCacher.increaseUnos(NextNoType.USER, size);
   }
 
-  async getNextno(biztype: number) {
-    const next = await this.nextnoService.getEnableNextNo(biztype);
+  async getNextno(biztype: NextNoType) {
+    const next = await this.nextnoCacher.getNextno(biztype);
 
     const unoInfo = RandomHelper.buildUno(next, this.seeds);
     return {

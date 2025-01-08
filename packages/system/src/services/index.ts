@@ -1,4 +1,4 @@
-export { NextNoService } from './next-no/next-no.service';
+export { ClientLogService } from './client-log.service';
 export { SysUserService } from './sys-user/sys-user.service';
 export { SystemConfigService } from './system.config.service';
 export { DictService } from './dict.service';

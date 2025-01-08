@@ -55,6 +55,7 @@
     },
     "peerDependenciesMeta": {},
     "dependencies": {
+        "@tsailab/core-types": "0.1.2",
         "class-validator": "0.14.1",
         "redis": "4.7.0",
         "svg-captcha-fixed": "1.5.2"

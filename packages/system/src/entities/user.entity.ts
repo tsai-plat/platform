@@ -1,7 +1,7 @@
 import { CommonEntity } from '@tsailab/common';
 
-import { Column, Entity, Index } from 'typeorm';
-import { Exclude } from 'class-transformer';
+import { Column, Entity, Index, VirtualColumn } from 'typeorm';
+import { Exclude, Transform, Type } from 'class-transformer';
 import {
   AccountType,
   IUser,
@@ -67,6 +67,7 @@ export class UserEntity extends CommonEntity implements IUser {
     comment: 'platform,0-guest,999-system,2-merchant,3-farmer',
   })
   platform: PlatformEnum;
+
   @Column({
     type: 'varchar',
     nullable: true,
@@ -128,4 +129,12 @@ export class UserEntity extends CommonEntity implements IUser {
     comment: 'remark',
   })
   remark?: string;
+
+  @Type(() => Boolean)
+  @Transform((o) => Boolean(o.value))
+  @VirtualColumn({
+    query: (alias) =>
+      `SELECT ISNULL("password") AS "pwunset" FROM "loto_user" WHERE "id" = ${alias}.id`,
+  })
+  pwunset?: boolean;
 }

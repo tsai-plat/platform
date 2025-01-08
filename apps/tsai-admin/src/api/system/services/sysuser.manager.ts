@@ -11,13 +11,22 @@ import {
 } from '@tsailab/system/dist/models/suser.model';
 import { ConfigService } from '@nestjs/config';
 import {
+  BcryptHelper,
   BizException,
   ErrorCodeEnum,
   mapToObj,
+  RandomHelper,
   UpdateUserStatusModel,
 } from '@tsailab/common';
 import { Like } from 'typeorm';
-import { IUser, PageEnum } from '@tsailab/core-types';
+import {
+  IUser,
+  PageEnum,
+  PlatformEnum,
+  ROOT_TREE_NODE_ID,
+  UserStatusEnum,
+} from '@tsailab/core-types';
+import { NextNoCacheManager } from '@tsai-platform/core';
 
 @Injectable()
 export class SysUserManager {
@@ -27,6 +36,7 @@ export class SysUserManager {
     private readonly sysUserService: SysUserService,
     private readonly sysConfigService: SystemConfigService,
     private readonly config: ConfigService,
+    private readonly nextnoCacher: NextNoCacheManager,
   ) {}
 
   async queryList(dto: QueryAdminUserReqDto, filterDeleted = true) {
@@ -124,7 +134,99 @@ export class SysUserManager {
     if (!dto.password?.length) {
       dto.password = pw;
     }
-    return await this.sysUserService.createSuser(dto);
+    return await this.createSuser(dto);
+  }
+
+  /**
+   *
+   * @param model
+   */
+  async createSuser(model: CreateSUserModel, enpassword?: string) {
+    this.sysUserService.validCreateSUserModel(model);
+    if (!model.password && !enpassword) {
+      throw BizException.IllegalParamterError(
+        `Password in model or enpassword at latest one.`,
+      );
+    }
+
+    const {
+      phone,
+      email,
+      openid,
+      username,
+      orgid = ROOT_TREE_NODE_ID,
+      avatar,
+      platform = PlatformEnum.SYSTEM_PLATFORM,
+      isSuper = false,
+    } = model;
+
+    const accRepository = this.sysUserService.accRepository;
+    const qb = accRepository.createQueryBuilder('suser');
+    let dbUser;
+    if (phone?.length) {
+      dbUser = await qb.where({ phone }).getOne();
+      if (dbUser) {
+        throw BizException.createError(
+          ErrorCodeEnum.DATA_RECORD_CONFLICT,
+          `The phone [${phone}] has been exists in System.`,
+        );
+      }
+    }
+    if (email?.length) {
+      dbUser = await qb.where({ email }).getOne();
+      if (dbUser) {
+        throw BizException.createError(
+          ErrorCodeEnum.DATA_RECORD_CONFLICT,
+          `The email [${email}] has been exists in System.`,
+        );
+      }
+    }
+
+    if (openid?.length) {
+      dbUser = await qb.where({ openid }).getOne();
+      if (dbUser) {
+        throw BizException.createError(
+          ErrorCodeEnum.DATA_RECORD_CONFLICT,
+          `The Wechat openid has been bind an user in System.`,
+        );
+      }
+    }
+
+    const enpw = enpassword?.length
+      ? enpassword
+      : await BcryptHelper.encryptPassword(model.password);
+
+    const nextno = await this.nextnoCacher.getNextno(
+      this.sysUserService.nextnoType,
+    );
+    const { uno, value } = await RandomHelper.buildUno(
+      nextno,
+      this.sysConfigService.getUnoSeeds(),
+    );
+
+    const created: Partial<SystemUserEntity> = {
+      userno: uno,
+      username: username ?? uno,
+      nickname: username ?? value,
+      phone,
+      email,
+      password: enpw,
+      avatar,
+      status: UserStatusEnum.NORMAL,
+      isSuper,
+      platform,
+      openid,
+      orgid,
+    };
+
+    const entity = await accRepository.save(accRepository.create(created));
+
+    // set used
+    await this.nextnoCacher.setHash(this.sysUserService.nextnoType, nextno);
+
+    entity.password = '';
+
+    return entity;
   }
 
   async setUserIsSuper(id: number, isSuper: boolean = false) {

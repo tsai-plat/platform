@@ -1,16 +1,22 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
-import { LotoAppListener } from '@tsailab/common';
+import { CookieConfigSchema, LotoAppListener } from '@tsailab/common';
 import * as chalk from 'chalk';
 import { isDevMode } from './settings';
 import loadSslOptions from './settings/ssl.options';
 import helmet from 'helmet';
-import { RequestMethod } from '@nestjs/common';
+import { RequestMethod, ValidationPipe } from '@nestjs/common';
 import { convertYes } from '@tsailab/core-types';
+import * as cookieParser from 'cookie-parser';
 
 import { version, author, name, description } from '../package.json';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import {
+  HttpExceptionFilter,
+  validationExceptionFactory,
+} from '@tsai-platform/core';
+import { defaultCookieOpts } from './auth/auth.constants';
 
 async function bootstrap() {
   const listeners: Array<LotoAppListener> = [];
@@ -51,7 +57,7 @@ async function bootstrap() {
     const docDesc = configService.get<string>('swagger.docDesc', description);
     const wikiUrl = configService.get<string>(
       'swagger.wiki',
-      'https://github.com/tsai-plat/tsai-cli#readme',
+      'https://github.com/tsai-plat',
     );
 
     const options = new DocumentBuilder()
@@ -67,6 +73,23 @@ async function bootstrap() {
     const document = await SwaggerModule.createDocument(app, options);
     await SwaggerModule.setup(`docs-${apiPrefix}`, app, document);
   }
+
+  // cookie
+  const { secret } = await configService.get<CookieConfigSchema>(
+    'cookie',
+    defaultCookieOpts,
+  );
+  await app.use(cookieParser(secret));
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      exceptionFactory: validationExceptionFactory,
+      skipUndefinedProperties: true,
+    }),
+  );
+
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   // listen on
   await app.listen(appPort, '0.0.0.0');

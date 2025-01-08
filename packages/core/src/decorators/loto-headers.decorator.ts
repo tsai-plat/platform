@@ -1,5 +1,9 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { LotoHeadersType, UuidGenerator } from '@tsailab/common';
+import {
+  LotoHeadersType,
+  parseClientType,
+  UuidGenerator,
+} from '@tsailab/common';
 import { IUserSession, LotoHeaderEnum } from '@tsailab/core-types';
 import * as requestIP from 'request-ip';
 
@@ -24,6 +28,12 @@ export const LotoHeaders = createParamDecorator(
       LotoHeaderKeyType: '',
       orgno: user?.orgno ?? '',
     };
+    if (typeof info.cliid === 'string') {
+      const clit = parseClientType(info.cliid as string);
+      if (info.cliid?.length) {
+        info.clit = clit;
+      }
+    }
 
     return info && props ? info[props as string] : info;
   },

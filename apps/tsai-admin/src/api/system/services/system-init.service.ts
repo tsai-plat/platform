@@ -1,17 +1,15 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import {
-  NextNoService,
-  OrganizationService,
-  SysUserService,
-} from '@tsailab/system';
+import { NextNoCacheManager } from '@tsai-platform/core';
+import { NextNoType } from '@tsailab/core-types';
+import { OrganizationService, SysUserService } from '@tsailab/system';
 
 @Injectable()
 export class SystemInitService implements OnModuleInit {
   private readonly logger = new Logger(SystemInitService.name);
   constructor(
     private readonly organizationService: OrganizationService,
-    private readonly nextNoService: NextNoService,
     private readonly sysUserService: SysUserService,
+    private readonly nextnoCacheManager: NextNoCacheManager,
   ) {}
   onModuleInit() {
     this.initRootOrganization();
@@ -30,11 +28,13 @@ export class SystemInitService implements OnModuleInit {
 
   private async initUserNos() {
     try {
-      const count = await this.nextNoService.autoInitBatchNosOnModuleInit(
-        1,
-        1000,
-      );
-      this.logger.log(`Initialize user no success ${count} records`);
+      const msg = await this.nextnoCacheManager.increaseUnos(NextNoType.USER);
+      // const nextno = await this.nextnoCacheManager.getNextno(
+      //   NextNoBiztype.USER,
+      // );
+      // await this.nextnoCacheManager.setHash(NextNoBiztype.USER, nextno);
+      // this.logger.log(`>>>>>>>>>>>>>>>>>>>>>>>>>>>>: ${nextno}`);
+      this.logger.log(`Initialize user no success: ${msg}`);
     } catch (e) {
       this.logger.error(`Initialize user no error,${e.message}`);
     }

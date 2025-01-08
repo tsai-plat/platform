@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../entities';
 import { Repository } from 'typeorm';
 import { BizException, ErrorCodeEnum } from '@tsailab/common';
+import { isEmail, isMobilePhone } from 'class-validator';
 
 @Injectable()
 export class UserService {
@@ -18,6 +19,14 @@ export class UserService {
 
   public get respository(): Repository<UserEntity> {
     return this.userRepository;
+  }
+
+  public getByUsername(username: string): Promise<UserEntity | null> {
+    return this.userRepository
+      .createQueryBuilder()
+      .withDeleted()
+      .where({ username: username })
+      .getOne();
   }
 
   public getByUserno(no: string): Promise<UserEntity | null> {
@@ -41,6 +50,14 @@ export class UserService {
       .createQueryBuilder()
       .withDeleted()
       .where({ phone: phone })
+      .getOne();
+  }
+
+  public getByEmail(email: string) {
+    return this.userRepository
+      .createQueryBuilder()
+      .withDeleted()
+      .where({ phone: email })
       .getOne();
   }
 
@@ -87,5 +104,25 @@ export class UserService {
     );
 
     return created;
+  }
+
+  public async findUserAccount(account: string): Promise<UserEntity | null> {
+    if (isEmail(account)) {
+      return await this.getByEmail(account);
+    }
+    if (isMobilePhone(account, 'zh-CN')) {
+      return await this.getByPhone(account);
+    }
+
+    const user = await this.userRepository
+      .createQueryBuilder('u')
+      .withDeleted()
+      .andWhere('u.username = :username OR u.userno = :userno', {
+        username: account,
+        userno: account,
+      })
+      .getOne();
+
+    return user;
   }
 }

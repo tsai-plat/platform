@@ -27,8 +27,8 @@ importers:
         specifier: ^10.0.2
         version: 10.0.2(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13)(reflect-metadata@0.2.2)(rxjs@7.8.1)(typeorm@0.3.20(ioredis@5.4.1)(mysql2@3.11.5)(redis@4.7.0)(ts-node@10.9.2(@types/node@22.10.1)(typescript@5.7.2)))
       '@tsailab/core-types':
-        specifier: 0.0.12
-        version: 0.0.12
+        specifier: 0.1.2
+        version: 0.1.2
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -132,6 +132,12 @@ importers:
       '@nestjs/core':
         specifier: ^10.0.0
         version: 10.4.13(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.13)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/jwt':
+        specifier: 10.2.0
+        version: 10.2.0(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))
+      '@nestjs/passport':
+        specifier: 10.0.3
+        version: 10.0.3(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(passport@0.7.0)
       '@nestjs/platform-express':
         specifier: ^10.4.13
         version: 10.4.13(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13)
@@ -148,8 +154,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/common
       '@tsailab/core-types':
-        specifier: 0.0.12
-        version: 0.0.12
+        specifier: 0.1.2
+        version: 0.1.2
       '@tsailab/ioredis-mq':
         specifier: 0.0.4
         version: 0.0.4(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13)(@nestjs/platform-express@10.4.13)(chalk@4.1.2)(eslint@8.57.1)(ioredis@5.4.1)(js-yaml@4.1.0)(reflect-metadata@0.2.2)(rxjs@7.8.1)
@@ -177,9 +183,18 @@ importers:
       helmet:
         specifier: 8.0.0
         version: 8.0.0
+      ioredis:
+        specifier: 5.4.1
+        version: 5.4.1
       mysql2:
         specifier: 3.11.5
         version: 3.11.5
+      passport:
+        specifier: 0.7.0
+        version: 0.7.0
+      passport-jwt:
+        specifier: 4.0.1
+        version: 4.0.1
       reflect-metadata:
         specifier: ^0.2.0
         version: 0.2.2
@@ -280,6 +295,9 @@ importers:
       '@tsailab/common':
         specifier: workspace:*
         version: link:../../packages/common
+      '@tsailab/core-types':
+        specifier: 0.1.1
+        version: 0.1.1
       '@tsailab/ioredis-mq':
         specifier: 0.0.4
         version: 0.0.4(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13)(@nestjs/platform-express@10.4.13)(chalk@4.1.2)(eslint@8.57.1)(ioredis@5.4.1)(js-yaml@4.1.0)(reflect-metadata@0.2.2)(rxjs@7.8.1)
@@ -499,6 +517,9 @@ importers:
 
   packages/core:
     dependencies:
+      '@tsailab/core-types':
+        specifier: 0.1.2
+        version: 0.1.2
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -576,6 +597,9 @@ importers:
       '@nestjs/typeorm':
         specifier: ^10.0.2
         version: 10.0.2(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13)(reflect-metadata@0.2.2)(rxjs@7.8.1)(typeorm@0.3.20(ioredis@5.4.1)(mysql2@3.11.5)(redis@4.7.0)(ts-node@10.9.2(@types/node@22.10.1)(typescript@5.7.2)))
+      '@tsailab/core-types':
+        specifier: 0.1.1
+        version: 0.1.1
     devDependencies:
       '@nestjs/common':
         specifier: ^10.0.0
@@ -589,6 +613,9 @@ importers:
       '@tsailab/common':
         specifier: workspace:*
         version: link:../common
+      chalk:
+        specifier: 4.1.2
+        version: 4.1.2
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -1162,8 +1189,11 @@ packages:
   '@sqltools/formatter@1.2.5':
     resolution: {integrity: sha512-Uy0+khmZqUrUGm5dmMqVlnvufZRSK0FbYzVgp0UMstm+F5+W2/jnEEQyc9vo1ZR/E5ZI/B1WjjoTqBqwJL6Krw==}
 
-  '@tsailab/core-types@0.0.12':
-    resolution: {integrity: sha512-4b3NWgJ4DRHjBNEUvDip/54GWSuTlxVP7h0czyXKR/DYabH5Cf3zgnnWy3e0pwDBuOtSjQ7xzqaFFXdbQmFgMA==}
+  '@tsailab/core-types@0.1.1':
+    resolution: {integrity: sha512-Y5K1qiHP/eyU9xS/k6LSyuN+ApJfp/xV57kBG4EEiLqiY0wwDJzbH9azEqIkijbetCFrf8HZH8sSHeP45unKfg==}
+
+  '@tsailab/core-types@0.1.2':
+    resolution: {integrity: sha512-De3+YpPFaGVK4ip/BwvjEv8sLAesvIOJB6qujIFKOmky4LcZuYQ1F9528M2VRaEEKPSEhlevYliw9DoPKVvvGw==}
 
   '@tsailab/ioredis-mq@0.0.4':
     resolution: {integrity: sha512-wvu1u0KmoeibY9cTVVvxynkRYOq9ciF9lraUiwzVJsj6Be0E1hkC0ZAzC9QLs2eVVkUhdbqD+ZP988Z9IT4KQQ==}
@@ -4639,7 +4669,9 @@ snapshots:
 
   '@sqltools/formatter@1.2.5': {}
 
-  '@tsailab/core-types@0.0.12': {}
+  '@tsailab/core-types@0.1.1': {}
+
+  '@tsailab/core-types@0.1.2': {}
 
   '@tsailab/ioredis-mq@0.0.4(@nestjs/common@10.4.13(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.13)(@nestjs/platform-express@10.4.13)(chalk@4.1.2)(eslint@8.57.1)(ioredis@5.4.1)(js-yaml@4.1.0)(reflect-metadata@0.2.2)(rxjs@7.8.1)':
     dependencies:

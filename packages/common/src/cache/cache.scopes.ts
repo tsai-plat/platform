@@ -6,4 +6,6 @@ export const CacheKeyScope: CacheKeyEnumType = {
   GUEST_TOKEN: 'guesttk',
   CAPTCH_CODE: 'captch',
   SMS_CODE: 'sms',
+  NEXTNO_LIST: 'nolist',
+  NEXTNO_HASH: 'nohash',
 };
