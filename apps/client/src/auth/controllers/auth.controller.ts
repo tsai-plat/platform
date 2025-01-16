@@ -65,7 +65,7 @@ export class AuthController {
       platform = PlatformEnum.MOB_PLATFORM,
     } = dto;
     const cookieValue = req.cookies[CaptchaCodeCookieKey];
-    // await this.captcha.validateCaptchaValue(code, cookieValue);
+    await this.captcha.validateCaptchaValue(code, cookieValue);
 
     return this.registService.registeredCustomAccount(
       {

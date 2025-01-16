@@ -21,6 +21,13 @@ export class CacheKeyHelper {
     return combineCacheKey(...[scope, id]);
   }
 
+  static buildVendorTokenKey(
+    scope: string,
+    ...parts: Array<string | number>
+  ): string {
+    return combineCacheKey(...[scope, ...parts]);
+  }
+
   /**
    *
    * @param uid required

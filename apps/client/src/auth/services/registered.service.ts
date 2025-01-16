@@ -206,7 +206,10 @@ export class CustomRegisteredService {
       };
       const token = await this.authHelper.createAccessToken(u);
 
-      return token;
+      return {
+        ...u,
+        token,
+      };
     } catch (ex: any) {
       await this.nextnoCacher.reclaimNextno(nextno, NextNoType.USER);
       mqpayload.result = ex?.message ?? `账号${mqpayload.operator} 注册失败!`;

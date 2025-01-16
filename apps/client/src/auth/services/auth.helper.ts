@@ -56,6 +56,30 @@ export class AuthHelper {
 
     return token;
   }
+
+  /**
+   *
+   * @param user
+   * @param state
+   * @returns TokenUserCache
+   */
+  async createAccessTokenUser(
+    user: IUser,
+    state: string = RandomHelper.randomState(),
+  ): Promise<TokenUserCache> {
+    const cacheKey = this.getTokenKey(user.id, user.clit, user.acctype);
+    const payload = await this.buildAccessPayload(user, state);
+    const token = await this.jwt.sign(payload);
+    const cache: TokenUserCache = {
+      ...user,
+      token,
+    };
+
+    await this.cacheService.setData(cacheKey, cache, this.expireinSeconds);
+
+    return cache;
+  }
+
   /**
    *
    * 加密用户密码

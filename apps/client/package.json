@@ -31,7 +31,6 @@
     "@nestjs/typeorm": "^10.0.2",
     "@tsai-platform/core": "workspace:*",
     "@tsailab/common": "workspace:*",
-    "@tsailab/core-types": "0.1.2",
     "@tsailab/ioredis-mq": "0.0.4",
     "@tsailab/system": "workspace:*",
     "chalk": "4.1.2",

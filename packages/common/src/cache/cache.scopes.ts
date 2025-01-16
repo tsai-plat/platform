@@ -8,4 +8,6 @@ export const CacheKeyScope: CacheKeyEnumType = {
   SMS_CODE: 'sms',
   NEXTNO_LIST: 'nolist',
   NEXTNO_HASH: 'nohash',
+  WECHAT_AUTH_TOKEN: 'wxtk',
+  VENDOR_TOKEN: 'vendortk',
 };
