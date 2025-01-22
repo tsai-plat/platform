@@ -90,3 +90,39 @@ export type CookieConfigSchema = {
   sameSite?: 'strict' | 'lax' | 'none';
   [k: string]: any;
 };
+
+/**
+ * default 1800 max 7200
+ * durationSeconds like: 3600 or 60*60*2
+ */
+export type TecentObsSchema = {
+  durationSeconds?: string | number;
+  appid: string;
+  secretId: string;
+  secretKey: string;
+  bucket: string;
+  region: string;
+  cdn: string;
+  endpoint?: string;
+  allowPrefix?: string;
+  followRedirect?: boolean;
+  storageClass?:
+    | 'STANDARD'
+    | 'STANDARD_IA'
+    | 'ARCHIVE'
+    | 'DEEP_ARCHIVE'
+    | 'INTELLIGENT_TIERING'
+    | 'MAZ_STANDARD'
+    | 'MAZ_STANDARD_IA'
+    | 'MAZ_INTELLIGENT_TIERING';
+};
+
+export type AliObsSchema = {
+  durationSeconds?: string | number;
+  appid: string;
+  secretId: string;
+  secretKey: string;
+  bucket: string;
+  region: string;
+  cdn: string;
+};

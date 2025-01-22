@@ -105,10 +105,10 @@ export class ClientLogEntity extends BaseEntity {
 
   @Column({
     name: 'typ',
-    type: 'int',
+    type: 'varchar',
     nullable: true,
-    default: 0,
-    comment: 'log type',
+    default: '',
+    comment: 'log record type',
   })
-  typ: number;
+  typ: string;
 }

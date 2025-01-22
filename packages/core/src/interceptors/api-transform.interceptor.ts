@@ -8,6 +8,7 @@ import {
 import { Observable, map } from 'rxjs';
 import { IgnoreTransformPropertyName } from '../decorators';
 import { APIHttpStatus, APIResponse } from '@tsailab/core-types';
+import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
 export class ApiTransformInterceptor implements NestInterceptor {
@@ -25,7 +26,7 @@ export class ApiTransformInterceptor implements NestInterceptor {
             return {
               code: APIHttpStatus.OK,
               message: 'Success',
-              result: data,
+              result: instanceToPlain(data),
             };
           }),
         );

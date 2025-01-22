@@ -8,6 +8,7 @@ export enum ErrorCodeEnum {
   ILLEGAL_ARGS = 400,
   PARAMS_INVALID = 400400,
   PASSPORT_UNSAFE = 400401,
+
   /** 5xx */
   SERVICE_INTERNAL_ERROR = 500,
   SERVICE_UNAVAILABLE = 503,
@@ -16,4 +17,9 @@ export enum ErrorCodeEnum {
   DATA_RECORD_REMOVED = 500200,
   /**业务操作权限 */
   USER_NO_PERMISSION = 511000,
+  USER_NOT_FOUND = 511101,
+  USER_FORBIDDEN = 511102,
+
+  /** Vendor */
+  VENDOR_SERVICE_ERROR = 505505,
 }

@@ -99,4 +99,19 @@ export class RandomHelper {
 
     return seed % 17 === m;
   }
+
+  /**
+   *
+   * @param len
+   * @returns
+   */
+  static randomNumberCode(len: number = 6): string {
+    if (len < 1 || len > 40) len = 6;
+    let code = '';
+    while (code.length < len) {
+      code = `${code}${Math.floor(Math.random() * 10)}`;
+    }
+
+    return code;
+  }
 }

@@ -105,7 +105,7 @@ export class CustomSigninDto implements PasswordRegisteredAccount {
     name: 'platform',
     enum: PlatformEnum,
   })
-  @ValidateIf((o, value) => {
+  @ValidateIf((_o, value) => {
     if (value) {
       return ClientPlatforms.map((v) => v.toString()).includes(value);
     }

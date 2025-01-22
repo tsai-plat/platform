@@ -1,5 +1,4 @@
 import { DynamicModule, Module } from '@nestjs/common';
-
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   ClientLogEntity,
@@ -24,7 +23,7 @@ import { RoleService } from './services/role.service';
 import { ClientLogService } from './services/client-log.service';
 
 @Module({
-  providers: [ClientLogService],
+  providers: [],
   exports: [],
 })
 export class SystemModule {

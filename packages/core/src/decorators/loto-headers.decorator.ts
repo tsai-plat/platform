@@ -21,6 +21,7 @@ export const LotoHeaders = createParamDecorator(
     const info: LotoHeadersType = {
       ip: requestIP.getClientIp(request) ?? '',
       uid: user?.id,
+      uno: user?.userno,
       username: user?.username ?? '',
       reqid,
       cliid: request.headers[LotoHeaderEnum.X_Loto_Key],

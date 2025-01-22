@@ -59,9 +59,22 @@ export class HttpExceptionFilter<T> implements ExceptionFilter {
       const validEx = exception as ValidationException;
 
       const res = validEx.getResponse();
+
       response.header('Content-type', CONTENT_TYPE_HEADER);
       response.status(HttpStatus.BAD_REQUEST);
       response.send(res);
+    } else if (exception instanceof BadRequestException) {
+      const validEx = exception as ValidationException;
+
+      const res = validEx.getResponse();
+
+      response.header('Content-type', CONTENT_TYPE_HEADER);
+      response.status(HttpStatus.BAD_REQUEST);
+      response.send({
+        code: validEx.getStatus(),
+        message: validEx.message,
+        error: typeof res === 'string' ? res.toString() : (res as any)?.message,
+      });
     } else {
       const statusCode =
         status || response?.statusCode || HttpStatus.INTERNAL_SERVER_ERROR;

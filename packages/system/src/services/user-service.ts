@@ -57,7 +57,7 @@ export class UserService {
     return this.userRepository
       .createQueryBuilder()
       .withDeleted()
-      .where({ phone: email })
+      .where({ email: email })
       .getOne();
   }
 

@@ -9,6 +9,8 @@ export type LotoHeaderKeyType = 'x-loto-key' | 'x-loto-reqid';
 export type LotoHeadersType = {
   LotoHeaderKeyType: string | string[] | undefined;
   uid?: number | undefined;
+  uno?: string;
+  username?: string;
   orgno: string;
   reqid: string;
   cliid: string;

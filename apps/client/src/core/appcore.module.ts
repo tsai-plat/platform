@@ -1,7 +1,12 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { NextNoCacheManager } from '@tsai-platform/core';
+import {
+  AttachmentEntity,
+  AttachmentService,
+  CosService,
+  NextNoCacheManager,
+} from '@tsai-platform/core';
 import { BizException, ErrorCodeEnum } from '@tsailab/common';
 import { IORedisModuleOptions, IORedisMQModule } from '@tsailab/ioredis-mq';
 import { UserEntity, UserService } from '@tsailab/system';
@@ -10,7 +15,7 @@ import { ClientlogProducer } from './mq/clientlog.producer';
 @Global()
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([AttachmentEntity, UserEntity]),
     IORedisMQModule.forRootAsync({
       useFactory: (config: ConfigService) => {
         const ioredisOpts = config.get('cache.ioredis');
@@ -25,7 +30,19 @@ import { ClientlogProducer } from './mq/clientlog.producer';
       inject: [ConfigService],
     }),
   ],
-  providers: [UserService, ClientlogProducer, NextNoCacheManager],
-  exports: [UserService, ClientlogProducer, ClientlogProducer],
+  providers: [
+    AttachmentService,
+    CosService,
+    ClientlogProducer,
+    NextNoCacheManager,
+    UserService,
+  ],
+  exports: [
+    AttachmentService,
+    CosService,
+    ClientlogProducer,
+    NextNoCacheManager,
+    UserService,
+  ],
 })
 export class AppcoreModule {}

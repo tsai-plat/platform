@@ -21,13 +21,13 @@ export class ClientLogService {
   /**
    *
    * @param payload
-   * @param type
+   * @param type log record type
    * @param locked
    * @returns
    */
   async createClientLog(
     payload: MQLogPayload,
-    type: number,
+    type: string,
     locked: boolean = false,
   ): Promise<ClientLogEntity | never> {
     const entity = ClientLogService.buildClientLogEntity(payload, {
@@ -40,7 +40,7 @@ export class ClientLogService {
 
   static buildClientLogEntity(
     payload: MQLogPayload,
-    options: { locked?: boolean; typ: number } = { locked: false, typ: 0 },
+    options: { locked?: boolean; typ: string } = { locked: false, typ: '' },
   ): Partial<ClientLogEntity> {
     const {
       bizcode,
@@ -77,7 +77,7 @@ export class ClientLogService {
       options: JSON.stringify(opts),
       error,
       extrajson: extra ? JSON.stringify(extra) : undefined,
-      locked,
+      locked: payload?.locked || locked,
       typ,
     };
 

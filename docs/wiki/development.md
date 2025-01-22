@@ -26,4 +26,7 @@ pnpm -F core build
 
 # add workspace lib to other lib
 pnpm -F ucenter add  @tsailab/common -D --save-peer
+
+# 清理缓存
+pnpm store prune
 ```

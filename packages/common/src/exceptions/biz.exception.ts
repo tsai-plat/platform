@@ -31,6 +31,10 @@ export class BizException extends Error {
     this._error = err;
   }
 
+  get message() {
+    return super.message;
+  }
+
   static createError(
     code: BizException | number,
     message?: string,

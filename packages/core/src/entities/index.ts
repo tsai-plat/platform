@@ -1,1 +1,1 @@
-export default {};
+export { AttachmentEntity } from './attachment.entity'

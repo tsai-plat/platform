@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import { Body, Controller, Param, Post, Req } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CustomSigninDto, QuickRegisteredUser } from '../dto';
 import { LotoHeadersType } from '@tsailab/common';
@@ -11,6 +11,8 @@ import {
 import { Request } from 'express';
 import { CaptchaCodeCookieKey } from '../auth.constants';
 import { PlatformEnum, UserStatusEnum } from '@tsailab/core-types';
+import { VerifyCodeLoginDto } from '../dto/login.dto';
+import { CustomSigninManager } from '../services/signin.manager';
 
 @ApiTags('PC Auth 模块')
 @Controller()
@@ -18,6 +20,7 @@ export class AuthController {
   constructor(
     private readonly registService: CustomRegisteredService,
     private readonly captcha: ClientCaptchaService,
+    private readonly signinManager: CustomSigninManager,
   ) {}
 
   @PublicApi()
@@ -79,5 +82,29 @@ export class AuthController {
       },
       headers,
     );
+  }
+
+  @PublicApi()
+  @ApiOperation({
+    summary: '发送验证码',
+  })
+  @Post('send_verify_code/:account')
+  sendVerifyCode(
+    @Param('account') account: string,
+    @LotoHeaders() headers: LotoHeadersType,
+  ) {
+    return this.signinManager.sendVerifyCodeForLogin(account, headers);
+  }
+
+  @PublicApi()
+  @ApiOperation({
+    summary: '验证码登录',
+  })
+  @Post('signin_with_code')
+  verifyCodeSignin(
+    @Body() dto: VerifyCodeLoginDto,
+    @LotoHeaders() headers: LotoHeadersType,
+  ) {
+    return this.signinManager.verifyCodeLogin(dto, headers);
   }
 }

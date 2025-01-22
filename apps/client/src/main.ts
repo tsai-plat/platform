@@ -83,9 +83,10 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
+      enableDebugMessages: true,
       transform: true,
       exceptionFactory: validationExceptionFactory,
-      skipUndefinedProperties: true,
+      skipUndefinedProperties: false,
     }),
   );
 

@@ -21,6 +21,16 @@ export class CacheKeyHelper {
     return combineCacheKey(...[scope, id]);
   }
 
+  /**
+   * an verify code or link url
+   * @param scope email,phone,uno,link,etd.
+   * @param id
+   * @returns string
+   */
+  static buildVerifyKey(scope: string, id: string | number): string {
+    return combineCacheKey('@verify', scope, id);
+  }
+
   static buildVendorTokenKey(
     scope: string,
     ...parts: Array<string | number>

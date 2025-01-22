@@ -7,6 +7,7 @@ import {
   ClientCaptchaService,
   ClientConfigService,
   NextNoCacheManager,
+  VerifyCodeService,
   WechatGHSDKClient,
 } from '@tsai-platform/core';
 import { PassportModule } from '@nestjs/passport';
@@ -19,6 +20,7 @@ import { WechatAuthController } from './controllers/wechat-auth.controller';
 import { WechatAuthorizeService } from './services/wechat-authorize.service';
 import { HttpModule } from '@nestjs/axios';
 import { Agent } from 'https';
+import { CustomSigninManager } from './services/signin.manager';
 
 @Global()
 @Module({
@@ -86,6 +88,8 @@ import { Agent } from 'https';
     NextNoCacheManager,
     WechatGHSDKClient,
     WechatAuthorizeService,
+    VerifyCodeService,
+    CustomSigninManager,
   ],
   exports: [
     ClientCaptchaService,
@@ -93,6 +97,8 @@ import { Agent } from 'https';
     CustomRegisteredService,
     AuthHelper,
     AuthService,
+    VerifyCodeService,
+    CustomSigninManager,
   ],
 })
 export class AuthModule {}

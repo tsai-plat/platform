@@ -1,4 +1,12 @@
-import { Controller, Get, HttpStatus, Query, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Query,
+  Res,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ClientCaptchaService, PublicApi } from '@tsai-platform/core';
 import { CookieConfigSchema, RandomHelper } from '@tsailab/common';
@@ -7,6 +15,7 @@ import { CliRestfulAPIModules } from 'src/api/restful.module.constants';
 import { CookieOptions, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { CaptchaCodeCookieKey, defaultCookieOpts } from '../auth.constants';
+import { isEmail } from 'class-validator';
 
 @ApiTags(`${CliRestfulAPIModules.authorization.name} Captcha`)
 @Controller('captcha')
@@ -32,6 +41,18 @@ export class CaptchaController {
     res.type(HttpContentTypeEnum.svgXml);
     res.status(HttpStatus.OK);
     res.send(captcha);
+  }
+
+  @PublicApi()
+  @ApiOperation({
+    summary: '发送验证码',
+  })
+  @Post('send_code/:account')
+  @Get('send_code/:account')
+  sendVerifyCode(@Param('account') account: string) {
+    if (isEmail(account)) {
+    } else {
+    }
   }
 
   private async setCaptchaCookie(res: Response, value: string) {

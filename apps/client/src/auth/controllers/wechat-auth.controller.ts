@@ -1,8 +1,9 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { WechatAuthorizeService } from '../services';
-import { LotoHeaders, PublicApi } from '@tsai-platform/core';
+
 import { WechatAuthorizeParam } from '@tsailab/core-types';
 import { LotoHeadersType } from '@tsailab/common';
+import { LotoHeaders, PublicApi } from '@tsai-platform/core';
 
 @Controller('wechat')
 export class WechatAuthController {
@@ -26,3 +27,4 @@ export class WechatAuthController {
     return this.wechatAuthService.slientRegistered(dto, reqHeaders);
   }
 }
+
