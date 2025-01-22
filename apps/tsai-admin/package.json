@@ -32,7 +32,6 @@
     "@tsailab/common": "workspace:*",
     "@tsailab/core-types": "0.1.13",
     "@tsailab/ioredis-mq": "0.0.4",
-    "@tsailab/node-redis": "workspace:*",
     "@tsailab/system": "workspace:*",
     "bcrypt": "5.1.1",
     "class-transformer": "^0.5.1",

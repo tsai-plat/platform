@@ -38,15 +38,6 @@
         "tsConfigPath": "packages/common/tsconfig.pkg.json"
       }
     },
-    "node-redis": {
-      "type": "library",
-      "root": "packages/node-redis",
-      "entryFile": "index",
-      "sourceRoot": "packages/node-redis/src",
-      "compilerOptions": {
-        "tsConfigPath": "packages/node-redis/tsconfig.pkg.json"
-      }
-    },
     "core": {
       "type": "library",
       "root": "packages/core",
@@ -54,15 +45,6 @@
       "sourceRoot": "packages/core/src",
       "compilerOptions": {
         "tsConfigPath": "packages/core/tsconfig.pkg.json"
-      }
-    },
-    "cache-redis": {
-      "type": "library",
-      "root": "packages/cache-redis",
-      "entryFile": "index",
-      "sourceRoot": "packages/cache-redis/src",
-      "compilerOptions": {
-        "tsConfigPath": "packages/cache-redis/tsconfig.pkg.json"
       }
     },
     "system": {
