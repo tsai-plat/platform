@@ -32,7 +32,7 @@
     "@tsai-platform/core": "workspace:*",
     "@tsailab/common": "workspace:*",
     "@tsailab/core-types": "0.1.13",
-    "@tsailab/ioredis-mq": "0.0.4",
+    "@tsailab/ioredis-mq": "0.0.5",
     "@tsailab/system": "workspace:*",
     "chalk": "4.1.2",
     "class-transformer": "^0.5.1",
